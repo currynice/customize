@@ -1,4 +1,4 @@
-package com.cxy.customize.core.clone.jdk;
+package com.cxy.customize.core.clone.jdk.shallow;
 
 public class ShallowClone {
     public static void main(String[] args) throws Exception {

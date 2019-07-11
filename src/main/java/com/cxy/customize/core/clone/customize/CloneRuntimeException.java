@@ -4,23 +4,23 @@ package com.cxy.customize.core.clone.customize;
 /**
  * 克隆自定义异常
  */
-public class CloneRunTimeException extends RuntimeException {
+public class CloneRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 6774837422188798989L;
 
-    public CloneRunTimeException() {
+    public CloneRuntimeException() {
         super();
     }
 
     //TODO ExceptionUtil.getMessage()获得异常完整消息
-    public CloneRunTimeException(Throwable cause) {
+    public CloneRuntimeException(Throwable cause) {
         super(cause);
     }
 
-    public CloneRunTimeException(String message) {
+    public CloneRuntimeException(String message) {
         super(message);
     }
 
-    public CloneRunTimeException(String message, Throwable cause) {
+    public CloneRuntimeException(String message, Throwable cause) {
         super(message, cause);
     }
 

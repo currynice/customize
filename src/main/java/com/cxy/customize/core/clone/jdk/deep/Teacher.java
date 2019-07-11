@@ -1,4 +1,4 @@
-package com.cxy.customize.core.clone.jdk;
+package com.cxy.customize.core.clone.jdk.deep;
 
 import java.io.Serializable;
 

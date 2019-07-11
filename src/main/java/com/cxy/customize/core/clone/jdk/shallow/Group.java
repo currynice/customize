@@ -1,4 +1,4 @@
-package com.cxy.customize.core.clone.jdk;
+package com.cxy.customize.core.clone.jdk.shallow;
 
 //深克隆
 public class Group implements Cloneable{

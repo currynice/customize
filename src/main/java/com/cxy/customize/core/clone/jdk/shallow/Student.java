@@ -1,4 +1,4 @@
-package com.cxy.customize.core.clone.jdk;
+package com.cxy.customize.core.clone.jdk.shallow;
 
 //浅克隆，需要实现java.lang.Cloneable接口，这是一个空接口，要实现克隆功能，需要重写Object.clone方法
 public class Student implements Cloneable {
