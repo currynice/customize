@@ -3,8 +3,9 @@ package com.cxy.customize.core.clone.jdk.deep;
 import java.io.Serializable;
 
 public class Teacher implements Serializable {
-    private static final long serialVersionUID = 1L;
 
+
+    private static final long serialVersionUID = 3728128008887281331L;
     private int age;
 
     private String name;
