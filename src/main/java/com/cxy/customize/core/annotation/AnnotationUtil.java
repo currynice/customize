@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * 注解工具类
+ * https://hutool.cn/docs/#/core/%E6%B3%A8%E8%A7%A3/%E6%B3%A8%E8%A7%A3%E5%B7%A5%E5%85%B7-AnnotationUtil?id=%E6%B3%A8%E8%A7%A3%E5%B7%A5%E5%85%B7-annotationutil
  */
 public class AnnotationUtil {
 
