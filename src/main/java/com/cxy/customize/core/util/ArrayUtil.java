@@ -1,9 +1,6 @@
 package com.cxy.customize.core.util;
 
 
-
-import com.cxy.customize.core.exceptions.UtilException;
-
 import java.lang.reflect.Array;
 
 /**
