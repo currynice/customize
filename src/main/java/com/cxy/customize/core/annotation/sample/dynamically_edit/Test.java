@@ -1,11 +1,8 @@
-package com.cxy.customize.core.annotation.sample;
+package com.cxy.customize.core.annotation.sample.dynamically_edit;
 
 import com.cxy.customize.core.annotation.AnnotationUtil;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Proxy;
-import java.util.Map;
 
 public class Test {
 

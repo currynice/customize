@@ -1,13 +1,17 @@
 package com.cxy.customize.core.annotation;
 
+
+
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * 注解工具类
- * https://hutool.cn/docs/#/core/%E6%B3%A8%E8%A7%A3/%E6%B3%A8%E8%A7%A3%E5%B7%A5%E5%85%B7-AnnotationUtil?id=%E6%B3%A8%E8%A7%A3%E5%B7%A5%E5%85%B7-annotationutil
  */
 public class AnnotationUtil {
 
@@ -37,6 +41,22 @@ public class AnnotationUtil {
         }catch (IllegalAccessException e){
             throw new IllegalAccessException("字段访问失败");
         }
+    }
 
+
+
+
+
+    /**
+     * 将指定的被注解的元素转换为组合注解元素
+     *
+     * @param annotationEle 注解元素 可以是Class、Method、Field、Constructor、ReflectPermission
+     * @return 组合注解元素
+     */
+    public static CombinationAnnotationElement toCombination(AnnotatedElement annotationEle) {
+        if(annotationEle instanceof cn.hutool.core.annotation.CombinationAnnotationElement) {
+            return (CombinationAnnotationElement)annotationEle;
+        }
+        return new CombinationAnnotationElement(annotationEle);
     }
 }

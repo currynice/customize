@@ -1,4 +1,4 @@
-package com.cxy.customize.core.annotation.sample;
+package com.cxy.customize.core.annotation.sample.dynamically_edit;
 
 public class City {
 
