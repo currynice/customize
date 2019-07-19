@@ -70,7 +70,7 @@ public class StrUtil {
             return true;
         }
         for(int i=0;i<length;i++){
-            //只要一个字符非空，该字符串即为空
+            // 只要有一个非空字符即为非空字符串
            if(!CharUtil.isBlankChar(str.charAt(i))){
                 return false;
            }
