@@ -1,6 +1,9 @@
 package com.cxy.customize.core.util;
 
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.util.Date;
 
 /**
  * 字符串工具类
@@ -331,6 +334,7 @@ public class StrUtil {
      * @return
      */
     public static boolean isEndWith(CharSequence str,char c){
+
         return c==str.charAt(str.length()-1);
     }
 
@@ -399,6 +403,316 @@ public class StrUtil {
         }
         return false;
     }
+
+    /**
+     * 判断字符串是否被指定的前缀后缀 字符串 所包围
+     * @return   是否包围，空串不包围
+     */
+    public static boolean isSurround(CharSequence str,CharSequence start,CharSequence end){
+        if(isBlank(str)){
+           return  false;
+        }
+        //给定的长度小于前缀后缀之和
+        if(str.length()<(start.length()+end.length())){
+            return false;
+        }
+        return startWith(str,start)&&endWith(str,end);
+    }
+
+
+    /**
+     * 判断字符串是否被指定的前缀后缀 字符 所包围
+     * @return   是否包围，空串不包围
+     */
+    public static boolean isSurround(CharSequence str,char start,char end){
+        if(isBlank(str)){
+            return  false;
+        }
+        //给定的长度小于前缀后缀之和(2)
+        if(str.length()<2){
+            return false;
+        }
+        return str.charAt(0)==start&&str.charAt(str.length()-1)==end;
+    }
+
+    //...upper And lower
+
+    /**
+     * 首字母大写
+     * @param str
+     * str = "string"
+     * @return   "String"
+     */
+    public static String upperFirst(CharSequence str){
+        if(null==str){
+            return null;
+        }
+        if(str.length()>0){
+            char firstChar = str.charAt(0);
+            //小写字母
+            if(Character.isLowerCase(firstChar)){
+                return Character.toUpperCase(firstChar)+subSuf(str, 1);
+            }
+        }
+            return str.toString();
+    }
+
+
+    /**
+     * 首字母小写
+     * @param str
+     * str = "String"
+     * @return   "string"
+     */
+    public static String lowerFirst(CharSequence str){
+        if(null==str){
+            return null;
+        }
+        if(str.length()>0){
+            char firstChar = str.charAt(0);
+            //大写字母
+            if(Character.isUpperCase(firstChar)){
+                return Character.toLowerCase(firstChar)+subSuf(str, 1);
+            }
+        }
+        return str.toString();
+    }
+
+
+
+    //..........removeXXX 去除前缀后缀
+
+    /**
+     * {@link CharSequence} 转为字符串，null安全
+     * @param str
+     * @return
+     */
+    public static String str(CharSequence str){
+        return null==str?null:str.toString();
+    }
+
+
+    /**
+     * 去除指定字符串的前缀
+     * tips:1.不以指定前缀开头将返回原字符串
+     * @return
+     */
+    public static String removePrefix(CharSequence str,CharSequence prefix){
+            if(isEmpty(str)||isEmpty(prefix)){
+                return str(str);
+            }
+            if(startWith(str,prefix)){
+                return subSuf(str, prefix.length());// 截取后半段
+            }
+            return str(str);
+    }
+
+
+    /**
+     * 去掉指定后缀(忽略大小写了)
+     *
+     * @param str 字符串
+     * @param suffix 后缀
+     * @return 切掉后的字符串，若后缀不是 suffix， 返回原字符串
+     */
+    public static String removeSuffix(CharSequence str, CharSequence suffix) {
+        if (isEmpty(str) || isEmpty(suffix)) {
+            return str(str);
+        }
+
+
+        if (endWith(str,suffix)) {
+            return subPre(str, str.length() - suffix.length());// 截取前半段
+        }
+        return str(str);
+    }
+
+//--------sub
+
+    /**
+     * 针对String.subString()越界问题进行封装<br>
+     * index从0开始计算，最后一个字符为-1(模仿python)<br>
+     * 如果from和to位置一样，返回 "" <br>
+     * 如果from或to为负数，则按照length从后向前数位置，如果绝对值大于字符串长度，则from归到0，to归到length<br>
+     * 如果经过修正的index中from大于to，则互换from和to example: <br>
+     * abcdefgh 2 3 =》 c <br>
+     * abcdefgh 2 -3 =》 cde <br>
+     *
+     * @see String#substring(int)
+     * @param str
+     * @param fromIndex 开始的index（包括）
+     * @param toIndex 结束的index（不包括）
+     * @return
+     */
+    public static String sub(CharSequence str, int fromIndex, int toIndex){
+            if(isEmpty(str)){
+                return str(str);
+            }
+            int len = str.length();
+
+            // 修正开始，如果from 为负数
+            if(fromIndex<0){
+                //按照length从后向前数位置
+                fromIndex+=len;
+                //绝对值小于字符串长度
+                if(fromIndex<0){
+                    //from变成0
+                    fromIndex = 0;
+                }
+            }//开始位置就大于字符串长度
+            else if (fromIndex > len) {
+                fromIndex =len;
+            }
+
+            //to 为负数
+        if(toIndex<0){
+            //按照length从后向前数位置
+            toIndex+=len;
+            //绝对值小于字符串长度
+            if(fromIndex<0){
+                //to变成len
+                toIndex = len;
+            }
+        }//结束位置就大于字符串长度
+        else if (toIndex > len) {
+            toIndex =len;
+        }
+
+        //修正结束,如果此时from 还是大于 to,二者互换位置
+        if(fromIndex>toIndex){
+            int i = fromIndex;
+            fromIndex = toIndex;
+            toIndex = i;
+        }
+        //二者相等的话,返回""
+        if (fromIndex == toIndex) {
+            return EMPTY;
+        }
+        return str(str).substring(fromIndex,toIndex);
+
+    }
+
+    /**
+     * 限制字符串长度，超出部分使用...
+     * @param string
+     * @param limit    限制长度
+     * @return
+     */
+    public static String maxLength(CharSequence string,int limit){
+        if(isEmpty(string)){
+            return str(string);
+        }
+        if(string.length()<=limit){
+            return string.toString();
+        }
+        return sub(string,0,limit)+"...";
+    }
+
+    /**
+     * 切割指定位置之前部分的字符串
+     *
+     * @param string 字符串
+     * @param toIndex 切割到的位置（不包括）
+     * @return 切割后的剩余的前半部分字符串
+     */
+    public static String subPre(CharSequence string, int toIndex) {
+        return sub(string, 0, toIndex);
+    }
+
+    /**
+     * 切割指定位置之后部分的字符串
+     *
+     * @param string 字符串
+     * @param fromIndex 切割开始的位置（包括）
+     * @return 切割后后剩余的后半部分字符串
+     */
+    public static String subSuf(CharSequence string, int fromIndex) {
+        if (isEmpty(string)) {
+            return null;
+        }
+
+        return sub(string, fromIndex, string.length());
+    }
+
+    //byte()方法:原生的String.getByte()方法
+    public static void main(String[] args)throws UnsupportedEncodingException {
+        String chs = "中";
+//        byte[] b_default = chs.getBytes();//文件编码方式
+//        byte[] b_gbk = chs.getBytes("gbk");
+//        byte[] b_utf8 = chs.getBytes("utf-8");
+//        byte[] b_iso88591 = chs.getBytes("iso8859-1");
+////        System.out.println(b_default.length);3
+////        System.out.println(b_gbk.length);2
+////        System.out.println(b_utf8.length);3
+////        System.out.println(b_iso88591.length);1
+//        //还原
+//        String s_default = new String(b_default);
+//        String s_gbk = new String(b_gbk,"gbk");
+//        String s_utf8 = new String(b_utf8,"utf8");
+//        String s_iso88591 = new String(b_iso88591,"iso8859-1");
+////        System.out.println(s_default);
+////        System.out.println(s_gbk);
+////        System.out.println(s_utf8);
+////        System.out.println(s_default);
+////        System.out.println(s_iso88591);
+//
+        String iso88591 = new String(chs.getBytes("utf8"),"iso8859-1");
+        System.out.println(iso88591);
+
+        String result = CharsetUtil.convert(iso88591,Charset.forName("iso8859-1"),Charset.forName("utf8"));
+        System.out.println(result);
+
+
+    }
+
+    /**
+     * 编码字符串，编码为UTF-8
+     *
+     * @param str 字符串
+     * @return
+     */
+    public static byte[] utf8Bytes(CharSequence str) {
+        return bytes(str, CharsetUtil.CHARSET_UTF_8);
+    }
+
+    /**
+     * 编码
+     * 系统默认编码
+     * @param str 字符串
+     * @return
+     */
+    public static byte[] bytes(CharSequence str){
+        return bytes(str,Charset.defaultCharset());
+    }
+
+    /**
+     * 编码
+     *
+     * @param str 字符串
+     * @param charsetName 字符集名称，如果为空(blank)，则解码的结果取决于平台
+     * @return
+     */
+    public static byte[] bytes(CharSequence str, String charsetName){
+        return bytes(str,isBlank(charsetName)?Charset.defaultCharset():Charset.forName(charsetName));
+    }
+
+
+    /**
+     * 编码
+     *
+     * @param str 字符串
+     * @param charset 字符集，如果此字段为空，则解码的结果取决于平台
+     * @return
+     */
+    public static byte[] bytes(CharSequence str,Charset charset){
+        if(null==str){
+            return null;
+        }
+        return null==charset?str.toString().getBytes():str.toString().getBytes(charset);
+    }
+
+
+
 
 
 
