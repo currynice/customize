@@ -1,4 +1,6 @@
-package com.cxy.customize.json.Jackson.parse;
+package com.cxy.customize.json.Jackson.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,18 +10,26 @@ import java.util.Map;
 
 
 /**
- * 员工全部信息
+ * 员工全部信息 测试@JsonIgnore<br>
+ *  默认情况下，Jackson 包括了所有fields(包括static transient修饰的)<br>
+ * JsonIgnore注解 在<strong>Field级别</strong> 对field进行过滤<br>
+ * JsonIgnoreProperties在 <strong>class级别</strong> 对field进行过滤<br>
  */
+@JsonIgnoreProperties({"position","salary"})
 public class Staff implements Serializable {
 
 
-    private static final long serialVersionUID = 4059184504213106155L;
+    private static final long serialVersionUID = 4059184504213106155L;//todo
 
     private String name;
     private int age;
-    private String[] position;              //  Array
-    private List<String> skills;            //  List
-    private Map<String, BigDecimal> salary; //  Map
+    private String[] position;
+
+
+    private List<String> skills;
+
+
+    private Map<String, BigDecimal> salary;
 
     public String getName() {
         return name;

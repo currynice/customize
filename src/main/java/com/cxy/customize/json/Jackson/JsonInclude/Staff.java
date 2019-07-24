@@ -1,4 +1,4 @@
-package com.cxy.customize.json.Jackson.parse;
+package com.cxy.customize.json.Jackson.JsonInclude;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,13 +8,15 @@ import java.util.Map;
 
 
 /**
- * 员工全部信息
+ * 员工全部信息 测试@JsonInclude
  */
+//用在类上，忽略所有null,全局一般在objectmapper设置设置
+// 也可以只用在单一字段上
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Staff implements Serializable {
 
 
-    private static final long serialVersionUID = 4059184504213106155L;
-
+    private static final long serialVersionUID = 4059184504213106155L;//todo
     private String name;
     private int age;
     private String[] position;              //  Array

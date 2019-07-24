@@ -1,4 +1,6 @@
-package com.cxy.customize.json.Jackson.parse;
+package com.cxy.customize.json.Jackson.JsonView;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -8,17 +10,30 @@ import java.util.Map;
 
 
 /**
- * 员工全部信息
+ * 员工全部信息 测试@JsonView
+ * 利用一个简单的继承，
+ * 让name 和age只对Normal显示
+ * 全部信息对Manager显示
  */
+
 public class Staff implements Serializable {
 
 
-    private static final long serialVersionUID = 4059184504213106155L;
+    private static final long serialVersionUID = 4059184504213106155L;//todo
 
+    @JsonView(CompanyViews.Normal.class)
     private String name;
+
+    @JsonView(CompanyViews.Normal.class)
     private int age;
+
+    @JsonView(CompanyViews.Manager.class)
     private String[] position;              //  Array
+
+    @JsonView(CompanyViews.Manager.class)
     private List<String> skills;            //  List
+
+    @JsonView(CompanyViews.Manager.class)
     private Map<String, BigDecimal> salary; //  Map
 
     public String getName() {
@@ -36,6 +51,7 @@ public class Staff implements Serializable {
     public void setAge(int age) {
         this.age = age;
     }
+
 
     public String[] getPosition() {
         return position;
