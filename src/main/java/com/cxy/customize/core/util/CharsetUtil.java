@@ -33,7 +33,7 @@ public class CharsetUtil {
      * @return
      * @throws UnsupportedEncodingException 编码不支持
      */
-    public Charset charset(String charsetName) throws UnsupportedEncodingException {
+    public static  Charset charset(String charsetName) throws UnsupportedEncodingException {
        return StrUtil.isBlank(charsetName)?Charset.defaultCharset():Charset.forName(charsetName);
     }
     /**

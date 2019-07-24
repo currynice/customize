@@ -4,7 +4,7 @@ package com.cxy.customize.core.util;
 import java.lang.reflect.Array;
 
 /**
- * 数组
+ * 数组 todo
  */
 public class ArrayUtil {
     /** 数组中元素未找到的下标，值为-1 */
@@ -339,6 +339,18 @@ public class ArrayUtil {
         return result;
     }
 
+    /**
+     * 判断对象是不是数组类型
+     * @param obj
+     * @return
+     */
+    public static boolean isArray(Object obj){
+
+        if(null==obj){
+            return false;
+        }
+        return obj.getClass().isArray();
+    }
 
 
 }

@@ -1,8 +1,13 @@
 package com.cxy.customize.core.util;
 
 
+import com.cxy.customize.core.text.StrFormatter;
+
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -482,15 +487,6 @@ public class StrUtil {
 
     //..........removeXXX 去除前缀后缀
 
-    /**
-     * {@link CharSequence} 转为字符串，null安全
-     * @param str
-     * @return
-     */
-    public static String str(CharSequence str){
-        return null==str?null:str.toString();
-    }
-
 
     /**
      * 去除指定字符串的前缀
@@ -636,7 +632,7 @@ public class StrUtil {
 
     //byte()方法:原生的String.getByte()方法
     public static void main(String[] args)throws UnsupportedEncodingException {
-        String chs = "中";
+            String chs = "中";
 //        byte[] b_default = chs.getBytes();//文件编码方式
 //        byte[] b_gbk = chs.getBytes("gbk");
 //        byte[] b_utf8 = chs.getBytes("utf-8");
@@ -656,11 +652,13 @@ public class StrUtil {
 ////        System.out.println(s_default);
 ////        System.out.println(s_iso88591);
 //
-        String iso88591 = new String(chs.getBytes("utf8"),"iso8859-1");
-        System.out.println(iso88591);
+//        String iso88591 = new String(chs.getBytes("utf8"),"iso8859-1");
+//        System.out.println(iso88591);
+//
+//        String result = CharsetUtil.convert(iso88591,Charset.forName("iso8859-1"),Charset.forName("utf8"));
+//        System.out.println(result);
 
-        String result = CharsetUtil.convert(iso88591,Charset.forName("iso8859-1"),Charset.forName("utf8"));
-        System.out.println(result);
+        System.out.println(str((Object) chs.getBytes("utf8"), StandardCharsets.UTF_8));
 
 
     }
@@ -711,11 +709,248 @@ public class StrUtil {
         return null==charset?str.toString().getBytes():str.toString().getBytes(charset);
     }
 
+    /**
+     * 字符串转换为ByteBuffer
+     * @param str
+     * @param charset
+     * @return
+     */
+    public static ByteBuffer byteBuffer(CharSequence str,Charset charset){
+        return ByteBuffer.wrap(bytes(str,charset));
+    }
+
+    //str 将xx变成字符串
+
+    /**
+     * 对象转换为字符串，字符集为UTF-8
+     *
+     * @param obj
+     * @return
+     */
+    public static String utf8Str(Object obj) {
+        return str(obj, CharsetUtil.CHARSET_UTF_8);
+    }
+
+    /**
+     * 将对象转为字符串<br>
+     * Byte数组和ByteBuffer会被转换为对应字符串
+     * @param obj
+     * @param charsetName
+     * @return
+     */
+    public static String str(Object obj,String charsetName){
+        return str(obj,Charset.forName(charsetName));
+    }
+
+
+    /**
+     * 将对象转为字符串<br>
+     * Byte数组和ByteBuffer会被转换为对应字符串
+     * @param obj
+     * @param charset
+     * @return
+     */
+    public static String str(Object obj,Charset charset){
+        if(null==obj){
+            return null;
+        }
+        if(obj instanceof String){
+            return (String)obj;
+        }else if(obj instanceof byte[]){
+            return str((byte[])obj,charset);
+        }else if(obj instanceof Byte[]){
+            return str((Byte[])obj,charset);
+        }else if(obj instanceof ByteBuffer){
+            return str((ByteBuffer)obj,charset);
+        }else if(ArrayUtil.isArray(obj)){
+            return Arrays.toString((Object[])obj);
+        }
+        return obj.toString();
+}
+
+    /**
+     * 解码字节码
+     * @param data
+     * @param charset
+     * @return
+     */
+    public static String str(Byte[] data,Charset charset){
+        if(null == data){
+            return null;
+        }
+        byte[] bytes = new byte[data.length];
+        for(int i=0;i<data.length;i++){
+            bytes[i] = (data[i]==null)?-1:data[i];
+        }
+        return str(bytes,charset);
+    }
+
+
+    /**
+     * 使用字符集 解码 字节码
+     * @param data
+     * @param charset
+     * @return
+     */
+    public static String str(byte[] data,Charset charset){
+        if(null == data){
+            return null;
+        }
+        if(null == charset){
+            return new String(data);
+        }
+        return new String(data,charset);
+
+    }
+
+
+    /**
+     *  限定编码<strong>字符集名称</strong>，将ByteBuffer 输出 String
+     * @param data  数据
+     * @param charsetName 字符集
+     * @tips 字符集为null,将使用 defaultCharset
+     * @return
+     */
+    public static String str(ByteBuffer data,String charsetName){
+        if(null==data){
+            return null;
+        }
+        return str(data,Charset.forName(charsetName));
+    }
+
+    /**
+     *  限定编码<strong>字符集</strong>，将ByteBuffer 输出 String
+     * @param data  数据
+     * @param charset 字符集
+     * @tips 字符集为null,将使用 defaultCharset
+     * @return
+     */
+    public static String str(ByteBuffer data,Charset charset){
+        if(null==charset){
+            charset = Charset.defaultCharset();
+        }
+        return charset.decode(data).toString();
+    }
 
 
 
 
+    /**
+     * {@link CharSequence} 转为字符串，null安全
+     * @param str
+     * @return
+     */
+    public static String str(CharSequence str){
+        return null==str?null:str.toString();
+    }
 
+
+
+    //驼峰下划线相互转换
+    /**
+     * 将驼峰式命名的字符串转换为使用符号连接方式。如果转换前的驼峰式命名的字符串为空，则返回空字符串。<br>
+     *
+     * @param str 转换前的驼峰式命名的字符串，也可以为符号连接形式
+     * @param symbol 连接符
+     * @return 转换后符号连接方式命名的字符串
+     */
+    public static String toSymbolCase(CharSequence str, char symbol) {
+        if (str == null) {
+            return null;
+        }
+
+        final int length = str.length();
+        final StringBuilder sb = new StringBuilder();
+        char c;
+        for (int i = 0; i < length; i++) {
+            c = str.charAt(i);
+            final Character preChar = (i > 0) ? str.charAt(i - 1) : null;
+            if (Character.isUpperCase(c)) {
+                // 遇到大写字母处理
+                final Character nextChar = (i < str.length() - 1) ? str.charAt(i + 1) : null;
+                if (null != preChar && Character.isUpperCase(preChar)) {
+                    // 前一个字符为大写，则按照一个词对待
+                    sb.append(c);
+                } else if (null != nextChar && Character.isUpperCase(nextChar)) {
+                    // 后一个为大写字母，按照一个词对待
+                    if (null != preChar && symbol != preChar) {
+                        // 前一个是非大写时按照新词对待，加连接符
+                        sb.append(symbol);
+                    }
+                    sb.append(c);
+                } else {
+                    // 前后都为非大写按照新词对待
+                    if (null != preChar && symbol != preChar) {
+                        // 前一个非连接符，补充连接符
+                        sb.append(symbol);
+                    }
+                    sb.append(Character.toLowerCase(c));
+                }
+            } else {
+                if (sb.length() > 0 && Character.isUpperCase(sb.charAt(sb.length() - 1)) && symbol != c) {
+                    // 当结果中前一个字母为大写，当前为小写，说明此字符为新词开始（连接符也表示新词）
+                    sb.append(symbol);
+                }
+                // 小写或符号
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 将下划线方式命名的字符串转换为驼峰式。如果转换前的下划线大写方式命名的字符串为空，则返回空字符串。<br>
+     * 例如：hello_world=》helloWorld
+     *
+     * @param name 转换前的下划线大写方式命名的字符串
+     * @return 转换后的驼峰式命名的字符串
+     */
+    public static String toCamelCase(CharSequence name) {
+        if (null == name) {
+            return null;
+        }
+
+        String name2 = name.toString();
+        if (name2.contains(UNDERLINE)) {
+            final StringBuilder sb = new StringBuilder(name2.length());
+            boolean upperCase = false;
+            for (int i = 0; i < name2.length(); i++) {
+                char c = name2.charAt(i);
+
+                if (c == CharUtil.UNDERLINE) {
+                    upperCase = true;
+                } else if (upperCase) {
+                    sb.append(Character.toUpperCase(c));
+                    upperCase = false;
+                } else {
+                    sb.append(Character.toLowerCase(c));
+                }
+            }
+            return sb.toString();
+        } else {
+            return name2;
+        }
+    }
+
+    /**
+     *
+     * 格式化输出
+     * 通常使用：format("我 {} 你", "爱") =》 我爱你<br>
+     * 转义{}： format("this is \\{} for {}", "a", "b") =》 this is \{} for a<br>
+     * 转义\： format("this is \\\\{} for {}", "a", "b") =》 this is \a for b<br>
+     * @param template  字符串模版
+     * @param params  依次调用toString()
+     * @return
+     */
+    public static String format(String template,Object...params){
+        if (null == template) {
+            return null;
+        }
+        if (ArrayUtil.isEmpty(params) || isBlank(template)) {
+            return template.toString();
+        }
+        return StrFormatter.format(template.toString(), params);
+    }
 
 
 
