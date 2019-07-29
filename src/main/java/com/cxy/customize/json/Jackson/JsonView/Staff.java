@@ -14,12 +14,13 @@ import java.util.Map;
  * 利用一个简单的继承，
  * 让name 和age只对Normal显示
  * 全部信息对Manager显示
+ * hr 可以看name age skills
  */
 
 public class Staff implements Serializable {
 
 
-    private static final long serialVersionUID = 4059184504213106155L;//todo
+    private static final long serialVersionUID = -8383612728519191314L;
 
     @JsonView(CompanyViews.Normal.class)
     private String name;
@@ -27,7 +28,7 @@ public class Staff implements Serializable {
     @JsonView(CompanyViews.Normal.class)
     private int age;
 
-    @JsonView(CompanyViews.Manager.class)
+    @JsonView({CompanyViews.Manager.class,CompanyViews.Hr.class})
     private String[] position;              //  Array
 
     @JsonView(CompanyViews.Manager.class)

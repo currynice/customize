@@ -3,7 +3,6 @@ package com.cxy.customize.json.Jackson.JsonView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -28,6 +27,10 @@ public class JsonViewTest {
         //Manager
         String managerView = objectMapper.writerWithView(CompanyViews.Manager.class).writeValueAsString(staff);
         System.out.format("Manager view\n %s",managerView);
+
+        //Hr
+        String hrView = objectMapper.writerWithView(CompanyViews.Hr.class).writeValueAsString(staff);
+        System.out.format("Hr view\n%s",hrView);
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -47,4 +50,8 @@ public class JsonViewTest {
         staff.setSkills(Arrays.asList("java", "python", "node", "kotlin"));
         return staff;
     }
+
+
+
+
 }

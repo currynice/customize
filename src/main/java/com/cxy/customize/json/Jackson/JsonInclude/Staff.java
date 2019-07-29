@@ -16,7 +16,7 @@ import java.util.Map;
 public class Staff implements Serializable {
 
 
-    private static final long serialVersionUID = 4059184504213106155L;//todo
+    private static final long serialVersionUID = -708438970224243447L;
     private String name;
     private int age;
     private String[] position;              //  Array

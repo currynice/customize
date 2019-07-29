@@ -10,9 +10,10 @@ import java.io.Serializable;
  */
 
 public class Staff implements Serializable {
+    private static final long serialVersionUID = -6887495293008068361L;
 
 
-    private static final long serialVersionUID = 4059184504213106155L;//todo
+
     @JsonProperty(value = "name2")//改变名字
     private String name;
     private int age;

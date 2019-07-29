@@ -151,4 +151,29 @@ public class AnnotationUtil {
         return  annotationType.isAnnotationPresent(Inherited.class);
     }
 
+    /**
+     * 某个类是否标记为Deprecated
+     * @param clasz
+     * @return
+     */
+    public static boolean isDeprecated(Class clasz){
+        return clasz.isAnnotationPresent(Deprecated.class);
+    }
+
+    /**
+     * 某个类中某方法是否标记为Deprecated
+     * @param clasz
+     * @param methodName
+     * @return
+     */
+        public static Boolean isDeprecated(Class clasz,String methodName,Class ...para){
+            try {
+                return clasz.getMethod(methodName,para).isAnnotationPresent(Deprecated.class);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+           return null;
+        }
+
+
 }

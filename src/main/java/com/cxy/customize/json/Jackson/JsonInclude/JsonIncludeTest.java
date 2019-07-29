@@ -11,6 +11,7 @@ public class JsonIncludeTest {
     public static void main(String[] args) {
     try{
         ObjectMapper objectMapper = new ObjectMapper();
+        //全局配置
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         String json = "{\"name\":\"mkyong\",\"age\":38,\"position\":null,\"skills\":null,\"salary\":null}";
         Staff staff = objectMapper.readValue(json,Staff.class);
