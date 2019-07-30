@@ -12,7 +12,7 @@ public class Json2MapTest {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             //json
-            String jsonStr = "{\"name\":\"cxy\",\"age\":\"22\"}";
+            String jsonStr = "{\"0\":\"内部\",\"1\":\"秘密 \",\"2\":\"机密 \",\"3\":\"绝密 \",\"4\":\"非密 \"}";
             //json to Map way1
             Map<String,String> map1 = objectMapper.readValue(jsonStr, Map.class);
             //json to Map way2
