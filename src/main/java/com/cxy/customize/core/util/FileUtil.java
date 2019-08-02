@@ -11,6 +11,9 @@ import java.io.File;
  */
 public class FileUtil {
 
+    private FileUtil() {
+    }
+
     // window 的分隔符'\\';
     private static final char WINDOWS_SPERATOR = CharUtil.BACKSLASH;
 

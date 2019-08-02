@@ -7,6 +7,9 @@ import java.lang.reflect.Array;
  * 数组 todo
  */
 public class ArrayUtil {
+    private ArrayUtil() {
+    }
+
     /** 数组中元素未找到的下标，值为-1 */
     public static final int INDEX_NOT_FOUND = -1;
 

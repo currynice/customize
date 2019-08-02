@@ -11,6 +11,8 @@ import java.io.File;
  * CXY
  */
 public class CharUtil {
+    private CharUtil(){}
+
     public static final char SPACE = ' ';
     public static final char TAB = '	';
     public static final char DOT = '.';
