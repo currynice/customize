@@ -76,9 +76,9 @@ public class ReflectUtil {
         return null;
     }
 
-
+//todo
     public static Field[]  getAllField(Class typeClass){
-
+return null;
     }
 
 
