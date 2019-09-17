@@ -4,10 +4,7 @@ package com.cxy.customize.core.util;
 import com.cxy.customize.core.date.DateField;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -137,10 +134,32 @@ public class DateUtil {
      * @return
      */
     public static LocalDateTime date2LocalDateTime(Date date) {
+        //秒数
         Instant instant = date.toInstant();
         ZoneId zone = ZoneId.systemDefault();
        return LocalDateTime.ofInstant(instant, zone);
     }
+
+    public static Instant getInstant(Date date){
+        return date.toInstant();
+    }
+
+    //获取秒
+    public static Long getSecond(Date date){
+        return getInstant(date).getEpochSecond();
+    }
+
+    //获取毫秒
+    public static Long getMilli(Date date){
+        return getInstant(date).toEpochMilli();
+    }
+
+    //获取纳秒
+    public static int getNano(Date date){
+        return getInstant(date).getNano();
+    }
+
+
 
 
     /**
@@ -180,5 +199,29 @@ public class DateUtil {
         return date2LocalDateTime(calendar.getTime());
     }
 
+    //时间段构造
+    public static Duration buildDuration(LocalDateTime from,LocalDateTime to){
+        return Duration.between(from,to);
+    }
+
+    //时间段
+    public static void testDurationInfo(){
+        LocalDateTime from = LocalDateTime.of(2017, Month.JANUARY, 1, 00, 0, 0);    // 2017-01-01 00:00:00
+        LocalDateTime to = LocalDateTime.of(2019, Month.SEPTEMBER, 12, 14, 28, 0);     // 2019-09-15 14:28:00
+        Duration duration = buildDuration(from, to);     // 表示从 from 到 to 这段时间
+        long days = duration.toDays();              // 这段时间的总天数
+        long hours = duration.toHours();            // 这段时间的小时数
+        long minutes = duration.toMinutes();        // 这段时间的分钟数
+        long seconds = duration.getSeconds();       // 这段时间的秒数
+        long milliSeconds = duration.toMillis();    // 这段时间的毫秒数
+        long nanoSeconds = duration.toNanos();      // 这段时间的纳秒数
+    }
+
+
+
+
+
+
 
 }
+
