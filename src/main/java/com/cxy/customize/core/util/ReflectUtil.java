@@ -95,11 +95,11 @@ return null;
         //testPClass();
         //testForName();
         //testVoid();
-        //testSuperclass();
+        testSuperclass();
 //        testgetClasses();
 //        System.out.println("-------");
 //        testgetDeclaredClasses();
-        testgetDeclaringClasses();
+       // testgetDeclaringClasses();
 
     }
 
@@ -167,6 +167,8 @@ return null;
         Assert.isNull(Object.class.getSuperclass());
         Assert.isNull(Integer.TYPE.getSuperclass());
         Assert.isNull(Void.TYPE.getSuperclass());
+        Class c = byte[][].class;
+        System.out.println(c.getSuperclass());//class java.lang.Object
     }
 
 
