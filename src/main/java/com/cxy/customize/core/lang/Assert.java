@@ -64,7 +64,7 @@ public class Assert {
         }
     }
     /**
-     * 是否为 非null
+     * 是否为 null
      * @param target 比较对象
      */
     public static void isNull(Object target) {

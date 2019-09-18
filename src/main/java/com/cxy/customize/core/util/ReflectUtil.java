@@ -1,9 +1,13 @@
 package com.cxy.customize.core.util;
 
 import cn.hutool.core.lang.SimpleCache;
+import com.cxy.customize.A;
 import com.cxy.customize.core.exceptions.UtilException;
+import com.cxy.customize.core.lang.Assert;
 
 import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -81,6 +85,117 @@ public class ReflectUtil {
 return null;
     }
 
+
+    enum E{
+        A,B
+    }
+
+    public static void main(String args[]) throws NoSuchFieldException {
+        //testGetClass();
+        //testPClass();
+        //testForName();
+        //testVoid();
+        //testSuperclass();
+//        testgetClasses();
+//        System.out.println("-------");
+//        testgetDeclaredClasses();
+        testgetDeclaringClasses();
+
+    }
+
+    private static void testGetClass(){
+                Class aClass = "cxy".getClass();
+        System.out.println(aClass);
+        if( System.console()!=null) {
+            Class bClass = System.console().getClass();
+            System.out.println(bClass);
+        }
+        //A是枚举类E的实例，所以getClass()相当于返回E
+        Class cClass = E.A.getClass();
+        System.out.println(cClass.equals(E.class));//true
+
+        byte[] bytes = new byte[1024];
+        byte[][] bytes2 = new byte[10][10];
+
+        Class dClass = bytes.getClass();
+        System.out.println(dClass); //class [B
+        Class dClass2 = bytes2.getClass();
+        System.out.println(dClass2); //class [[B
+
+        Set<String> s = new HashSet<String>();
+        Class eClass = s.getClass();
+        System.out.println(eClass);//class java.util.HashSet
+    }
+
+    private static  void testPClass(){
+        System.out.println(byte.class);//byte
+        System.out.println(byte[].class);//class [B
+        System.out.println(byte[][].class);//class [[B
+    }
+
+
+    private static void  testForName(){
+        try {
+            Class a = Class.forName("com.cxy.customize.core.date.DateField");
+            System.out.println(a.getName());
+
+            Class b = Class.forName("[[B");
+            System.out.println(b.getName());
+
+            //String[][].class;
+            Class c = Class.forName("[[Ljava.lang.String;");
+            System.out.println(c.getName());
+
+
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void testVoid(){
+       Class a =  Double.TYPE;
+       System.out.println(a);
+        Class b =  Void.TYPE;
+        System.out.println(b);
+    }
+
+
+    private static void testSuperclass(){
+        Assert.notNull(javax.swing.JButton.class.getSuperclass());
+        Assert.isNull(Object.class.getSuperclass());
+        Assert.isNull(Integer.TYPE.getSuperclass());
+        Assert.isNull(Void.TYPE.getSuperclass());
+    }
+
+
+    private static void testgetClasses(){
+       Class<?>[] classArray =Character.class.getClasses();
+       for(Class c :classArray){
+           System.out.println(c);
+       }
+    }
+
+    private static void testgetDeclaredClasses(){
+        Class<?>[] classArray =Character.class.getDeclaredClasses();
+        for(Class c :classArray){
+            System.out.println(c);
+        }
+    }
+
+    private static void testgetDeclaringClasses() throws NoSuchFieldException {
+        Class t =Character.UnicodeBlock.class.getDeclaringClass();
+
+        System.out.println(t);
+
+        Class t2 =A.t1.class.getDeclaringClass();
+
+        System.out.println(t2);
+        Class t3 =System.class.getField("out").getDeclaringClass();
+        System.out.println(t3);//class java.lang.System
+
+    }
 
 
 
