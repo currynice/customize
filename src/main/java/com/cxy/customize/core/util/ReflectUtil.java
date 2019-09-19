@@ -4,6 +4,7 @@ import cn.hutool.core.lang.SimpleCache;
 import com.cxy.customize.A;
 import com.cxy.customize.core.exceptions.UtilException;
 import com.cxy.customize.core.lang.Assert;
+import com.sun.org.apache.bcel.internal.classfile.InnerClass;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -95,12 +96,11 @@ return null;
         //testPClass();
         //testForName();
         //testVoid();
-        testSuperclass();
+       // testSuperclass();
 //        testgetClasses();
 //        System.out.println("-------");
 //        testgetDeclaredClasses();
-       // testgetDeclaringClasses();
-
+        testgetDeclaringClasses();
     }
 
     private static void testGetClass(){
@@ -186,16 +186,27 @@ return null;
         }
     }
 
+    /**
+     *获取外围类
+     * 针对匿名内部类，有getEnclosingClass方法
+     * @throws NoSuchFieldException
+     */
     private static void testgetDeclaringClasses() throws NoSuchFieldException {
         Class t =Character.UnicodeBlock.class.getDeclaringClass();
 
         System.out.println(t);
+        System.out.println(Character.UnicodeBlock.class.getEnclosingClass());
 
         Class t2 =A.t1.class.getDeclaringClass();
-
         System.out.println(t2);
+        System.out.println(A.t1.class.getEnclosingClass());
+
         Class t3 =System.class.getField("out").getDeclaringClass();
         System.out.println(t3);//class java.lang.System
+
+
+        System.out.println(InnnerClass.o.getClass().getDeclaringClass());
+        System.out.println(InnnerClass.o.getClass().getEnclosingClass());
 
     }
 

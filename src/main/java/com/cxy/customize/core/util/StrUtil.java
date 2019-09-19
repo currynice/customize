@@ -482,6 +482,47 @@ public class StrUtil {
         }
         return str.toString();
     }
+    /**
+     * 截取分隔字符串之前的字符串，不包括分隔字符串<br>
+     * 如果给定的字符串为空串（null或""）或者分隔字符串为null，返回原字符串<br>
+     * 如果分隔字符串为空串""，则返回空串，如果分隔字符串未找到，返回原字符串，举例如下：
+     *
+     * <pre>
+     * StrUtil.subBefore(null, *)      = null
+     * StrUtil.subBefore("", *)        = ""
+     * StrUtil.subBefore("abc", "a")   = ""
+     * StrUtil.subBefore("abcba", "b") = "a"
+     * StrUtil.subBefore("abc", "c")   = "ab"
+     * StrUtil.subBefore("abc", "d")   = "abc"
+     * StrUtil.subBefore("abc", "")    = ""
+     * StrUtil.subBefore("abc", null)  = "abc"
+     * </pre>
+     *
+     * @param string 被查找的字符串
+     * @param separator 分隔字符串（不包括）
+     * @param isLastSeparator 是否查找最后一个分隔字符串（多次出现分隔字符串时选取最后一个），true为选取最后一个
+     * @return 切割后的字符串
+     * @since 3.1.1
+     */
+    public static String subBefore(CharSequence string, CharSequence separator, boolean isLastSeparator) {
+        if (isEmpty(string) || separator == null) {
+            return null == string ? null : string.toString();
+        }
+
+        final String str = string.toString();
+        final String sep = separator.toString();
+        if (sep.isEmpty()) {
+            return EMPTY;
+        }
+        final int pos = isLastSeparator ? str.lastIndexOf(sep) : str.indexOf(sep);
+        if (INDEX_NOT_FOUND == pos) {
+            return str;
+        }
+        if (0 == pos) {
+            return EMPTY;
+        }
+        return str.substring(0, pos);
+    }
 
 
 
@@ -991,5 +1032,52 @@ public class StrUtil {
     }
 
 
+    /**
+     * 字符串为null,变成"" (empty)
+     * @param str
+     * @return
+     */
+    public static String nullToEmpty(CharSequence str) {
+        return nullToDefault(str,StrUtil.EMPTY);
+    }
 
+    /**
+     * 如果字符串是null，则返回指定字符串，否则返回字符串本身。
+     *
+     * <pre>
+     * nullToDefault(null, &quot;default&quot;)  = &quot;default&quot;
+     * nullToDefault(&quot;&quot;, &quot;default&quot;)    = &quot;&quot;
+     * nullToDefault(&quot;  &quot;, &quot;default&quot;)  = &quot;  &quot;
+     * nullToDefault(&quot;bat&quot;, &quot;default&quot;) = &quot;bat&quot;
+     * </pre>
+     *
+     * @param str 要转换的字符串
+     * @param defaultStr 默认字符串
+     *
+     * @return 字符串本身或指定的字符串
+     */
+    public static String nullToDefault(CharSequence str, String defaultStr) {
+        return (str == null) ? defaultStr : str.toString();
+    }
+
+
+    /**
+     * 如果str 不以 后缀结尾，添加后缀并返回
+     * @param str
+     * @param suffix
+     * @param ignoreCase
+     * @return
+     */
+    public static String contactIfNotEndWithSuffix(CharSequence str, String suffix,boolean ignoreCase){
+            if(isEmpty(str)||isEmpty(suffix)){
+                return str(str);
+            }
+            final String targetStr = str.toString();
+            final String suffixStr = suffix.toString();
+            if (ignoreCase){
+               return targetStr.toLowerCase().endsWith(suffix.toLowerCase())?targetStr:targetStr.concat(suffixStr);
+            }else {
+                return targetStr.endsWith(suffix)?targetStr:targetStr.concat(suffixStr);
+            }
+    }
 }
