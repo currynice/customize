@@ -7,7 +7,7 @@ import java.lang.reflect.*;
 import java.util.Map;
 
 /**
- * 注解工具类
+ * 注解工具类(那些ajava.lang.annotation.RetentionPolicy 是 RUNTIME 才能访问)
  */
 public class AnnotationUtil {
 

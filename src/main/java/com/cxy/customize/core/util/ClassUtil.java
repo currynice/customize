@@ -1,8 +1,5 @@
 package com.cxy.customize.core.util;
 
-
-
-
 import com.cxy.customize.core.ClassScaner;
 import com.cxy.customize.core.URLUtil;
 import com.cxy.customize.core.exceptions.UtilException;
@@ -10,10 +7,15 @@ import com.cxy.customize.core.lang.Filter;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.net.URL;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
+
+import static java.lang.System.out;
 
 /**
  * Class类方法工具类
@@ -211,7 +213,7 @@ public class ClassUtil {
         }
         return paths;
     }
-    
+
     /**
      * 获取指定类型分的默认值<br>
      * 默认值规则为：
@@ -247,13 +249,86 @@ public class ClassUtil {
 
         return null;
     }
+//Modifier $ Type
+
+    /**
+     * 获得一个类的修饰符描述(接口默认加abstract)
+     * @param clazz
+     * @return
+     */
+    public String getModifier(Class<?> clazz){
+        if(null!=clazz){
+            return Modifier.toString(clazz.getModifiers());
+        }
+        return null;
+    }
+
+    /**
+     * 获得泛型参数
+     * @param clazz
+     * @return
+     */
+    public static List<String> getTypeVariables(Class<?> clazz){
+        List<String> result = new ArrayList<>();
+        if(null!=clazz){
+            TypeVariable[] tv = clazz.getTypeParameters();
+            if (tv.length != 0){
+                result =   Arrays.asList(tv).stream().map(o->o.getName()).collect(Collectors.toList());
+            }
+        }
+        return result;
+    }
+
+    public static List<Type> getInterfaces(Class<?> clazz){
+        List<Type> result = new ArrayList<>();
+        if(null!=clazz){
+            Type[] intfs = clazz.getGenericInterfaces();
+            if (intfs.length != 0){
+                result =  Arrays.asList(intfs);
+            }
+        }
+        return result;
+    }
+
+    /**
+     *判断异常是否是检查型异常(没有RunTimeException)
+     * @param eClass
+     * @return
+     */
+    private static boolean isCheckedException(Class<? extends Throwable> eClass){
+        return inheritancePath(eClass).contains(RuntimeException.class);
+    }
+
+    /**
+     * 获得继承关系,数组是Object
+     *
+     * @param clazz
+     * @return
+     */
+    public static List<Class> inheritancePath(Class<?> clazz){
+        List<Class> result = new ArrayList<>();
+        if(null!=clazz){
+            getAncestor(clazz,result);
+        }
+        return result;
+    }
+
+    private static void getAncestor(Class<?> c,List<Class> result){
+        Class<?> ancestor =c.getSuperclass();
+        if (ancestor != null){
+            result.add(ancestor);
+            getAncestor(ancestor, result);
+        }
+    }
 
 
 
     public static void main(String args[]){
-        for(String p : getJavaClassPaths()){
-            System.out.println(p);
-        }
-        System.out.println(getClassPaths("com.",false));
+
+        inheritancePath(TimeoutException.class).forEach(out::println);
+        System.out.println(isCheckedException(TimeoutException.class));
+
+        inheritancePath(UtilException.class).forEach(out::println);
+        System.out.println(isCheckedException(UtilException.class));
     }
 }
