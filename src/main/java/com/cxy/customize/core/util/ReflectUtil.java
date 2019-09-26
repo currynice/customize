@@ -7,6 +7,7 @@ import com.cxy.customize.core.lang.Assert;
 import com.sun.org.apache.bcel.internal.classfile.InnerClass;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,6 +80,28 @@ public class ReflectUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * 执行方法
+     *
+     * @param <T> 返回对象类型
+     * @param target 对象，如果执行静态方法，此值为<code>null</code>
+     * @param method 方法（对象方法或static方法都可）
+     * @param args 参数对象
+     * @return 结果
+     * @throws UtilException 一些列异常的包装
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T invoke(Object target, Method method, Object... args) throws UtilException {
+        if (!method.isAccessible()) {
+            method.setAccessible(true);
+        }
+        try {
+            return (T) method.invoke(ClassUtil.isStatic(method) ? null : target, args);
+        } catch (Exception e) {
+            throw new UtilException(e);
+        }
     }
 
 //todo

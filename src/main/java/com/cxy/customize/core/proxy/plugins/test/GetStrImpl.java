@@ -1,4 +1,4 @@
-package com.cxy.customize.core.proxy.plugin;
+package com.cxy.customize.core.proxy.plugins.test;
 
 public class GetStrImpl implements IGetStr {
     @Override

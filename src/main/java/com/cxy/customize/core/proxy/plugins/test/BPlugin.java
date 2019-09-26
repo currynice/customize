@@ -1,6 +1,11 @@
-package com.cxy.customize.core.proxy.plugin;
+package com.cxy.customize.core.proxy.plugins.test;
 
-public class BPlugin implements Interceptor {
+import com.cxy.customize.core.proxy.interceptors.JDKPluginInterceptors;
+import com.cxy.customize.core.proxy.plugins.Invocation;
+import com.cxy.customize.core.proxy.plugins.Plugin;
+
+
+public class BPlugin implements Plugin {
 
 
         /** 执行拦截逻辑的方法 */
@@ -17,6 +22,6 @@ public class BPlugin implements Interceptor {
         /** 为原先的类生成代理对象 */
         @Override
         public Object plugin(Object target) {
-            return Plugin.wrap(target, this);
+            return JDKPluginInterceptors.wrap(target, this);
         }
     }

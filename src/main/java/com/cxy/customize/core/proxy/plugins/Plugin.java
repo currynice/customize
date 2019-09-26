@@ -1,9 +1,9 @@
-package com.cxy.customize.core.proxy.plugin;
+package com.cxy.customize.core.proxy.plugins;
 
 /**
  * 自定义插件拦截器
  */
-public interface Interceptor {
+public interface Plugin {
     //执行拦截逻辑
     Object intercept(Invocation invocation);
 

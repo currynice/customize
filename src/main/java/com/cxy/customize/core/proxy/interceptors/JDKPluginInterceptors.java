@@ -1,29 +1,33 @@
-package com.cxy.customize.core.proxy.plugin;
+package com.cxy.customize.core.proxy.interceptors;
+
+import com.cxy.customize.core.proxy.plugins.Invocation;
+import com.cxy.customize.core.proxy.plugins.Plugin;
+import com.cxy.customize.core.proxy.plugins.test.IGetStr;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * 生成代理对象
+ * jdk方式生成代理对象->插件
  */
-public class Plugin implements InvocationHandler {
+public class JDKPluginInterceptors implements InvocationHandler {
 
         /** 目标对象 */
         private final Object target;
         /** Interceptor对象 */
-        private final Interceptor interceptor;
+        private final Plugin interceptor;
 
-        public Plugin(Object target, Interceptor interceptor) {
+        public JDKPluginInterceptors(Object target, Plugin interceptor) {
             this.target = target;
             this.interceptor = interceptor;
         }
 
         /** 生成代理对象 */
-        public static Object wrap(Object target, Interceptor interceptor) {
+        public static Object wrap(Object target, Plugin interceptor) {
             return Proxy.newProxyInstance(target.getClass().getClassLoader(),
                     new Class[]{IGetStr.class},
-                    new Plugin(target, interceptor));
+                    new JDKPluginInterceptors(target, interceptor));
         }
 
         /** 被代理对象的方法执行时，这个方法会被执行 */

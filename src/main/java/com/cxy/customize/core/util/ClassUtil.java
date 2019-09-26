@@ -3,10 +3,12 @@ package com.cxy.customize.core.util;
 import com.cxy.customize.core.ClassScaner;
 import com.cxy.customize.core.URLUtil;
 import com.cxy.customize.core.exceptions.UtilException;
+import com.cxy.customize.core.lang.Assert;
 import com.cxy.customize.core.lang.Filter;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -319,6 +321,17 @@ public class ClassUtil {
             result.add(ancestor);
             getAncestor(ancestor, result);
         }
+    }
+
+    /**
+     * 根据modifier修饰符判断是否为静态方法
+     *
+     * @param method 方法
+     * @return 是否为静态方法
+     */
+    public static boolean isStatic(Method method) {
+        Assert.notNull(method, "Method to provided is null.");
+        return Modifier.isStatic(method.getModifiers());
     }
 
 

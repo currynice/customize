@@ -2,7 +2,6 @@ package com.cxy.customize.core.exceptions;
 
 import com.cxy.customize.core.util.StrUtil;
 
-import javax.print.DocFlavor;
 
 public class UtilException extends RuntimeException {
     private static final long serialVersionUID = -1862257739038645376L;
