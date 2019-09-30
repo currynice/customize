@@ -1,5 +1,7 @@
 package com.cxy.customize.core.math;
 
+import cn.hutool.core.util.StrUtil;
+
 import java.math.BigInteger;
 
 /**
@@ -89,10 +91,31 @@ public class NumberSystemUtil {
     }
 
 
+    public static byte charToAscii(char ch) {
+        return (byte)ch;
+    }
+
+
+    public static int charToAsciiValue(char ch) {
+        return (int)ch;
+    }
+
+
     public static void main(String args[]){
-        System.out.println(binary2Decimal("-110101"));
-        System.out.println(rightShift(53,3));
-        System.out.println(xor(1,1));
+
+
+        System.out.println((charToAsciiValue('h')));
+        System.out.println((charToAsciiValue('e')));
+        System.out.println((charToAsciiValue('l')));
+        System.out.println((charToAsciiValue('l')));
+        System.out.println((charToAsciiValue('o')));
+
+        System.out.println(decimal2Binary(charToAsciiValue('h')));
+        System.out.println(decimal2Binary(charToAsciiValue('e')));
+        System.out.println(decimal2Binary(charToAsciiValue('l')));
+        System.out.println(decimal2Binary(charToAsciiValue('l')));
+        System.out.println(decimal2Binary(charToAsciiValue('o')));
+
     }
 
 
