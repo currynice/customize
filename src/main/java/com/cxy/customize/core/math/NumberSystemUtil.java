@@ -1,6 +1,6 @@
 package com.cxy.customize.core.math;
 
-import cn.hutool.core.util.StrUtil;
+
 
 import java.math.BigInteger;
 
@@ -51,6 +51,8 @@ public class NumberSystemUtil {
         return num >>> m;
     }
 
+
+    //bit operation 位操作
     /**
      * 或
      * 有1真为真1
@@ -67,13 +69,14 @@ public class NumberSystemUtil {
     /**
      * 与
      * 有0假为假0
+     * 将数字和1进行与运算，得到数字的最后一位，最后一位为0是偶数，1是奇数，比对2取模快点
      * @param num1
      * @param num2
      * @return
      */
     public static int and(int num1, int num2) {
 
-        return (num1 | num2);
+        return (num1 & num2);
 
     }
 
@@ -89,6 +92,19 @@ public class NumberSystemUtil {
         return (num1 ^ num2);
 
     }
+
+    /**
+     * 非
+     * 0变成1,  1变成0
+     * @param num1
+     * @return
+     */
+    public static int not(int num1) {
+
+        return (~num1);
+
+    }
+
 
 
     public static byte charToAscii(char ch) {
@@ -115,6 +131,7 @@ public class NumberSystemUtil {
         System.out.println(decimal2Binary(charToAsciiValue('l')));
         System.out.println(decimal2Binary(charToAsciiValue('l')));
         System.out.println(decimal2Binary(charToAsciiValue('o')));
+        System.out.println(not(37));
 
     }
 
