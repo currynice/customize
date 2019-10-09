@@ -2,6 +2,8 @@ package com.cxy.customize.core.math;
 
 
 
+import com.cxy.customize.core.lang.Assert;
+
 import java.math.BigInteger;
 
 /**
@@ -105,6 +107,18 @@ public class NumberSystemUtil {
 
     }
 
+    /**
+     * 找到中间数
+     * 避免(min+max)/2  出现溢出
+     * @param min
+     * @param max
+     * @return
+     */
+    public static int middle(int min,int max) {
+        Assert.isTrue(min<=max,"min  is forced to be less than max ");
+        return min+(max-min)/2;
+    }
+
 
 
     public static byte charToAscii(char ch) {
@@ -131,8 +145,10 @@ public class NumberSystemUtil {
         System.out.println(decimal2Binary(charToAsciiValue('l')));
         System.out.println(decimal2Binary(charToAsciiValue('l')));
         System.out.println(decimal2Binary(charToAsciiValue('o')));
-        System.out.println(not(37));
-
+        System.out.println(leftShift(2,13));
+        System.out.println(0xffffffffffffffffL);
+        System.out.println(middle(2,10));
+        System.out.println(middle(1,10));
     }
 
 

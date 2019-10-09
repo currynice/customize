@@ -3,6 +3,7 @@ package com.cxy.customize.core.math.applications;
 import com.cxy.customize.core.math.NumberSystemUtil;
 
 
+
 /**
  * 位操作
  */
@@ -22,6 +23,7 @@ public class BitOperations {
     }
 
     /**
+     *
      * 利用异或特性进行交换
      * 两个相等的数疑异或为0
      * 一个数和0异或后不变
@@ -36,11 +38,26 @@ public class BitOperations {
         return new int[]{a,b};
     }
 
+
+    /**
+     * 交集:按位与 ,1代表交集
+     * @param args
+     */
+
+
+    /**
+     * 并集:按位或 ,1代表并集
+     * @param args
+     */
+
+
+
     public static void main(String args []){
         System.out.println(oddEven(-10));
         System.out.println(oddEven(0));
         System.out.println(oddEven(-5));
         int[] arr = exchanged(2,3);
-        System.out.println(arr[0]); System.out.println(arr[1]);
+        System.out.println(arr[0]);
+        System.out.println(arr[1]);
     }
 }
