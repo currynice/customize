@@ -9,11 +9,16 @@ public class IntMap implements BitMap {
     // Java 中 int 类型占 32bit，也即是 4 个字节
     private int[] ints;
 
+
     /**
      * 构造，93750000表示bit数
      */
     public IntMap() {
         ints = new int[93750000];
+    }
+
+    public IntMap(int size) {
+        ints = new int[size];
     }
 
     /**

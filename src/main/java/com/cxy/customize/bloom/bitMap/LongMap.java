@@ -18,6 +18,9 @@ public class LongMap implements BitMap {
         longs = new long[93750000];
     }
 
+    public LongMap(int size) {
+        longs = new long[size];
+    }
 
 
     @Override

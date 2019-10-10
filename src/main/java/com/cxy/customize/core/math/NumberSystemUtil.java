@@ -4,12 +4,23 @@ package com.cxy.customize.core.math;
 
 import com.cxy.customize.core.lang.Assert;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 
 /**
  * 进制转换
+ *
+ * 数学的ceil 和 floor 方法 上都有一句话：If the argument is NaN or an infinity or positive zero or negative zero, then the result is the same as the argument，
+ * 意思为：如果参数是 NaN、无穷、正 0、负 0，那么结果与参数相同，
+ * 如果是 -0.0，那么其结果是 -0.0
  */
 public class NumberSystemUtil {
+
+    /** 默认除法运算精度 */
+    private static final int DEFAUT_DIV_SCALE = 10;
+
+
     /**
      * 十进制转二进制
      * @param decimalSource
@@ -118,6 +129,64 @@ public class NumberSystemUtil {
         Assert.isTrue(min<=max,"min  is forced to be less than max ");
         return min+(max-min)/2;
     }
+
+
+    //exact division  精确除法start
+
+
+    //常用的四舍五入
+    public static BigDecimal exactDiv(double v1, double v2) {
+        return exactDiv(v1,v2,DEFAUT_DIV_SCALE,RoundingMode.HALF_UP);
+    }
+
+    public static BigDecimal exactDiv(String v1, String v2) {
+        return exactDiv(v1,v2,DEFAUT_DIV_SCALE,RoundingMode.HALF_UP);
+    }
+
+
+    public static BigDecimal exactDiv(double v1, double v2, int scale, RoundingMode roundingMode) {
+        return exactDiv(String.valueOf(v1),String.valueOf(v2),scale,roundingMode);
+    }
+
+    public static BigDecimal exactDiv(Double v1, Double v2, int scale, RoundingMode roundingMode) {
+        return exactDiv(Double.toString(v1),Double.toString(v2),scale,roundingMode);
+    }
+
+    public static BigDecimal exactDiv(Number v1, Number v2, int scale, RoundingMode roundingMode) {
+        return exactDiv(v1.toString(),v2.toString(),scale,roundingMode);
+    }
+
+    /**
+     * 提供(相对)精确的除法运算,除不尽的情况时,由scale指定精确度
+     *
+     * @param v1  使用{@link BigDecimal#BigDecimal(String)}避免精度丢失
+     * @param v2
+     * @param scale
+     * @param roundingMode {@link RoundingMode} 舍入模式
+     * @return
+     */
+    public static BigDecimal exactDiv(String v1, String v2, int scale, RoundingMode roundingMode) {
+       return exactDiv(new BigDecimal(v1),new BigDecimal(v2),scale,roundingMode);
+    }
+
+    /**
+     * 提供(相对)精确的除法运算,除不尽的情况时,由scale指定精确度
+     *
+     * @param v1 被除数
+     * @param v2 除数
+     * @param scale 精确度 取绝对值
+     * @param roundingMode 保留小数的模式 {@link RoundingMode}
+     * @return 商
+     */
+    public static BigDecimal exactDiv(BigDecimal v1, BigDecimal v2, int scale, RoundingMode roundingMode) {
+        Assert.notNull(v2, "0不能作为被除数");
+        if (null == v1) {
+            return BigDecimal.ZERO;
+        }
+        scale = Math.abs(scale);
+        return v1.divide(v2, scale, roundingMode);
+    }
+    //exact division  精确除法end
 
 
 
