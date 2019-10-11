@@ -6,7 +6,7 @@ import cn.hutool.core.lang.MurmurHash;
  * Hash算法大全
  * 推荐使用FNV1算法
  */
-public class HashMethodsUtil {
+public class HashFunctionUtil {
 
 	/**
 	 * 加法hash

@@ -1,7 +1,7 @@
 package com.cxy.customize.bloom.FilterByHash;
 
 
-import com.cxy.customize.core.util.HashMethodsUtil;
+import com.cxy.customize.core.util.HashFunctionUtil;
 
 public class TianlFilter extends AbstractFilter {
 
@@ -15,7 +15,7 @@ public class TianlFilter extends AbstractFilter {
 
 	@Override
 	public long hash(String str) {
-		return HashMethodsUtil.tianlHash(str) % size;
+		return HashFunctionUtil.tianlHash(str) % size;
 	}
 
 }

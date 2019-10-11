@@ -2,7 +2,7 @@ package com.cxy.customize.bloom;
 
 
 
-import com.cxy.customize.core.util.HashMethodsUtil;
+import com.cxy.customize.core.util.HashFunctionUtil;
 import java.io.*;
 import java.util.BitSet;
 
@@ -41,8 +41,8 @@ public class BitSetBloomFilter implements BloomFilter{
 		File file = new File(path);
 		try(
 			FileInputStream fileInputStream = new FileInputStream(file);
-			InputStreamReader isr = new InputStreamReader(fileInputStream);
-			BufferedReader reader = new BufferedReader(isr);){
+			InputStreamReader isr = new InputStreamReader(fileInputStream,charset);
+			BufferedReader reader = new BufferedReader(isr)){
 			String nextLine;
 			while(true) {
 				nextLine = reader.readLine();
@@ -121,21 +121,21 @@ public class BitSetBloomFilter implements BloomFilter{
 	public static int hash(String str, int k) {
 		switch (k) {
 			case 0:
-				return HashMethodsUtil.rsHash(str);
+				return HashFunctionUtil.rsHash(str);
 			case 1:
-				return HashMethodsUtil.jsHash(str);
+				return HashFunctionUtil.jsHash(str);
 			case 2:
-				return HashMethodsUtil.elfHash(str);
+				return HashFunctionUtil.elfHash(str);
 			case 3:
-				return HashMethodsUtil.bkdrHash(str);
+				return HashFunctionUtil.bkdrHash(str);
 			case 4:
-				return HashMethodsUtil.apHash(str);
+				return HashFunctionUtil.apHash(str);
 			case 5:
-				return HashMethodsUtil.djbHash(str);
+				return HashFunctionUtil.djbHash(str);
 			case 6:
-				return HashMethodsUtil.sdbmHash(str);
+				return HashFunctionUtil.sdbmHash(str);
 			case 7:
-				return HashMethodsUtil.pjwHash(str);
+				return HashFunctionUtil.pjwHash(str);
 			default:
 				return 0;
 		}

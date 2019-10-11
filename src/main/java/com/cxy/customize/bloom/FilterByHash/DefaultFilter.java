@@ -1,7 +1,7 @@
 package com.cxy.customize.bloom.FilterByHash;
 
 
-import com.cxy.customize.core.util.HashMethodsUtil;
+import com.cxy.customize.core.util.HashFunctionUtil;
 
 /**
  * 默认Bloom过滤器，使用Java自带的Hash算法
@@ -19,6 +19,6 @@ public class DefaultFilter extends AbstractFilter {
 	
 	@Override
 	public long hash(String str) {
-		return HashMethodsUtil.javaDefaultHash(str) % size;
+		return HashFunctionUtil.javaDefaultHash(str) % size;
 	}
 }
