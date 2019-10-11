@@ -36,7 +36,7 @@ public class CacheUtil {
     }
 
 
-    public static void main(String args[]){
+    public static void main(String args[]) throws InterruptedException {
         Cache<String, String> lruCache = CacheUtil.newLRUCache(3);
         lruCache.put("key1", "value1", DateUnit.SECOND.getMillis() * 3);
         lruCache.put("key2", "value2", DateUnit.SECOND.getMillis() * 3);
@@ -45,6 +45,13 @@ public class CacheUtil {
         lruCache.put("key4", "value4", DateUnit.SECOND.getMillis() * 3);
 
 //由于缓存容量只有3，当加入第四个元素的时候，根据LRU规则，最少使用的将被移除（2被移除）
+        System.out.println(lruCache.get("key1"));
+        System.out.println(lruCache.get("key2"));//null
+        System.out.println(lruCache.get("key3"));
+        System.out.println(lruCache.get("key4"));
+
+        Thread.sleep(5000);
+
         System.out.println(lruCache.get("key1"));
         System.out.println(lruCache.get("key2"));//null
         System.out.println(lruCache.get("key3"));

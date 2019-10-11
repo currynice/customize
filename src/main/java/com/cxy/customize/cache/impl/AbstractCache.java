@@ -53,6 +53,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public void put(K key, V object, long timeout) {
+		//前后加写锁
 		writeLock.lock();
 
 		try {
@@ -137,7 +138,7 @@ public abstract class AbstractCache<K, V> implements Cache<K, V> {
 			}
 			//懒惰策略,获取时查看是否过期
 			if (!co.isExpired()) {
-				// 命中
+				// 命中数加1
 				hitCount++;
 				return co.get(isUpdateLastAccess);
 			}
