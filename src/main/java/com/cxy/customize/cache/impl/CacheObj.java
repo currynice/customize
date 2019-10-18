@@ -88,4 +88,11 @@ public class CacheObj<K, V> {
 				", ttl=" + ttl +
 				'}';
 	}
+
+	/**
+	 *
+	 */
+	public static void main(){
+//		CacheObj<String>
+	}
 }
