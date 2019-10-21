@@ -203,5 +203,26 @@ public class CharUtil {
         }
     }
 
+    /**
+     *
+     * 大小写ascii差为32
+     * 转成大写  ch & 0b1101 1111 简写：ch & 0xDF,把第五位变为0
+     * 转成小写：ch | 0b0010 0000 简写：ch | 0x20,把第五位变为1
+     * lowerCase - >upperCase
+     * 结合加减乘除等基本运算符时要加括号, 位运算符优先级低
+     */
+    public static Character  upper(char c){
+        return (char)(c & 0xDF);
+    }
+
+    public static Character  lower(char c){
+        return (char)(c | 0x20);
+    }
+
+    public static void main(String args[]){
+        System.out.println(upper("a".charAt(0)));
+        System.out.println(lower("A".charAt(0)));
+    }
+
 
 }
