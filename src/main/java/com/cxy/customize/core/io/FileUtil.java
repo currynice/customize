@@ -543,6 +543,21 @@ public class FileUtil {
         }
     }
 
+
+    /**
+     * 创建RandomAccessFile
+     * @param name 文件名
+     * @param modeName
+     * @return
+     */
+    public static RandomAccessFile createRandomAccessFile(String name,String modeName){
+        try {
+            return new RandomAccessFile(name,modeName);
+        } catch (FileNotFoundException e) {
+            throw new IOCustomException(e);
+        }
+    }
+
     //——————RandomAccessFile end
 
 
