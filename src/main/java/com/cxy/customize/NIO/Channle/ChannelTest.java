@@ -4,21 +4,28 @@ import com.cxy.customize.core.io.FileUtil;
 import com.cxy.customize.core.io.file.FileModeEnum;
 
 import java.io.*;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.Future;
 
 public class ChannelTest {
 
-    public static void main(String args[]){
+    public static void main(String args[]) throws IOException, InterruptedException {
 //        testTeansferFrom();
 //        testTeansferto();
 
         //test SelectionKey
 //        int interSet = SelectionKey.OP_ACCEPT | SelectionKey.OP_CONNECT;
 //        testSelectionKey(interSet);
-        testSelector();
+//        testSelector();
+//        testFileWalksTree();
+//        deleteDirectory();
+        AsynchronousFileChannelTest();
     }
 
 
@@ -164,6 +171,130 @@ public class ChannelTest {
 
 
     }
+
+
+    public static void testSocketChannel() throws IOException {
+        SocketChannel socketChannel = SocketChannel.open();
+        socketChannel.configureBlocking(false);//设置非阻塞模式
+        socketChannel.connect(new InetSocketAddress("localhost",8084));
+
+        while(!socketChannel.finishConnect()){
+            //等待or else
+        }
+
+
+
+    }
+
+    public static void testServerSocketChannel() throws IOException {
+        //打开
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+
+
+        serverSocketChannel.socket().bind(new InetSocketAddress(8084));
+
+        while(true){
+          SocketChannel socketChannel = serverSocketChannel.accept();
+          //
+            break;
+        }
+        //关闭
+        serverSocketChannel.close();
+
+    }
+
+
+
+    private static  void testFileWalksTree() {
+        Path rootPath = Paths.get("D:\\cxy");
+        String fileToFind = File.separator + "README.txt";
+        try {
+            Files.walkFileTree(rootPath, new SimpleFileVisitor<Path>() {
+
+                @Override
+                public FileVisitResult visitFile(Path filepath, BasicFileAttributes attrs) throws IOException {
+                    String fileabsolutepath = filepath.toAbsolutePath().toString();
+                    System.out.println("当前文件绝对路径 = " + fileabsolutepath);
+                    if(fileabsolutepath.endsWith(fileToFind)){
+                        System.out.println("找到了 " + filepath.toAbsolutePath());
+                        return FileVisitResult.TERMINATE;
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 遍历删除一个非空的文件夹
+     */
+    private static void deleteDirectory(){
+        Path dir = Paths.get("d:\\cxy");
+        try {
+            Files.walkFileTree(dir,new SimpleFileVisitor<Path>(){
+                @Override
+                public FileVisitResult visitFile(Path path,BasicFileAttributes attrs)throws IOException{
+                    String currentName = path.toAbsolutePath().getFileName().toString();
+                    Files.delete(path);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir,IOException exc)throws IOException{
+
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+//http://ifeve.com/java-nio-asynchronousfilechannel/
+    private static void AsynchronousFileChannelTest() throws IOException {
+        Path path = Paths.get("D:\\cxy\\1.xml");
+
+//            //param2:操作选项
+            AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            long position = 0;
+//            Future<Integer> read = fileChannel.read(buffer,position);
+//            while(!read.isDone());
+//            //读取完毕
+//            buffer.flip();
+//            byte[] data = new byte[buffer.limit()];
+//            buffer.get(data);
+//            System.out.println(new String(data));
+//            buffer.clear();
+//            fileChannel.close();
+
+
+        fileChannel.read(buffer, position, buffer, new CompletionHandler<Integer, ByteBuffer>() {
+            @Override
+            public void completed(Integer result, ByteBuffer attachment) {
+                System.out.println("result = " + result);
+
+                attachment.flip();
+                byte[] data = new byte[attachment.limit()];
+                attachment.get(data);
+                System.out.println(new String(data));
+                attachment.clear();
+            }
+
+            @Override
+            public void failed(Throwable exc, ByteBuffer attachment) {
+
+            }
+        });
+
+    }
+
+
 
 
 
