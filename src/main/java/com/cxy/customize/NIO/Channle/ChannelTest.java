@@ -25,7 +25,8 @@ public class ChannelTest {
 //        testSelector();
 //        testFileWalksTree();
 //        deleteDirectory();
-        AsynchronousFileChannelTest();
+        //AsynchronousFileChannelReadTest();
+        AsynchronousFileChannelWriteTest();
     }
 
 
@@ -256,25 +257,27 @@ public class ChannelTest {
     }
 
 //http://ifeve.com/java-nio-asynchronousfilechannel/
-    private static void AsynchronousFileChannelTest() throws IOException {
+    private static void AsynchronousFileChannelReadTest() {
         Path path = Paths.get("D:\\cxy\\1.xml");
-
-//            //param2:操作选项
-            AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);
+        //param2:操作选项
+        try( AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);){
             ByteBuffer buffer = ByteBuffer.allocate(1024);
             long position = 0;
+            //使用Future方式start
 //            Future<Integer> read = fileChannel.read(buffer,position);
-//            while(!read.isDone());
+//            while(!read.isDone()){
+//
+//            }
 //            //读取完毕
-//            buffer.flip();
+            buffer.flip();
 //            byte[] data = new byte[buffer.limit()];
 //            buffer.get(data);
 //            System.out.println(new String(data));
 //            buffer.clear();
-//            fileChannel.close();
-
-
-        fileChannel.read(buffer, position, buffer, new CompletionHandler<Integer, ByteBuffer>() {
+            //使用Future方式end
+            //使用CompletionHandler方式start
+            fileChannel.read(buffer, position, buffer, new CompletionHandler<Integer, ByteBuffer>() {
+                //读取操作完成
             @Override
             public void completed(Integer result, ByteBuffer attachment) {
                 System.out.println("result = " + result);
@@ -285,13 +288,54 @@ public class ChannelTest {
                 System.out.println(new String(data));
                 attachment.clear();
             }
-
+            //出现异常
             @Override
             public void failed(Throwable exc, ByteBuffer attachment) {
 
             }
         });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
+    private static void AsynchronousFileChannelWriteTest()  {
+        Path path = Paths.get("D:\\cxy\\1.txt");
+        if(!path.toFile().exists()){
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try(AsynchronousFileChannel asyncChannle = AsynchronousFileChannel.open(path,StandardOpenOption.WRITE)){
+            ByteBuffer buffer = ByteBuffer.allocate(40);
+            buffer.put("hello world\r\n222".getBytes());
+            buffer.flip();
+            //1:Future
+//            Future<Integer> write = asyncChannle.write(buffer,0);
+//            while (!write.isDone()){
+//
+//            }
+//            buffer.clear();
+
+            //CompletionHandler
+            asyncChannle.write(buffer, 0,null, new CompletionHandler<Integer,ByteBuffer>() {
+
+                @Override
+                public void completed(Integer result, ByteBuffer attachment) {
+                    System.out.println("result:"+result);
+                    System.out.println("write done");
+                }
+
+                @Override
+                public void failed(Throwable exc, ByteBuffer attachment) {
+
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 
