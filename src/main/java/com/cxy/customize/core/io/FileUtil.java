@@ -6,9 +6,17 @@ import com.cxy.customize.core.io.file.FileModeEnum;
 import com.cxy.customize.core.lang.Assert;
 import com.cxy.customize.core.util.ArrayUtil;
 import com.cxy.customize.core.util.CharUtil;
+import com.cxy.customize.core.util.CharsetUtil;
 import com.cxy.customize.core.util.StrUtil;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -505,10 +513,6 @@ public class FileUtil {
 
 
 
-    public static void main(String [] args) throws IOException {
-
-
-}
 
     //——————RandomAccessFile start
     // 1.对文件内容（读操作和写操作）的访问
@@ -560,6 +564,52 @@ public class FileUtil {
 
     //——————RandomAccessFile end
 
+
+
+
+    /**
+     * 转换文件编码  todo  https://blog.csdn.net/v123411739/article/details/50620289
+     * @param file
+     * @return
+     * @throws IOException
+     */
+     public static void convertFile(File file, Charset encoderName) throws IOException {
+         if (!file.exists()) {
+             throw new IOException("file 没找到");
+         }
+         try (
+                //打开文件Channel
+                 RandomAccessFile accessFile = FileUtil.createRandomAccessFile(file, FileModeEnum.rw);
+                 FileChannel channel =  accessFile.getChannel()) {
+
+             //一次性将FileChannel的全部数据映射为ByteBuffer
+             MappedByteBuffer byteBuffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, file.length());
+
+             //切换为写模式
+             byteBuffer.clear();
+             //将ByteBUffer字节序列转为CharBuffer字符序列,根据encoderName
+             CharBuffer charBuffer = encoderName.decode(byteBuffer);
+
+             System.out.println(charBuffer.toString());
+
+
+         } catch (IOException e) {
+             e.printStackTrace();
+
+         }
+     }
+
+    public static void main(String [] args) throws IOException {
+        File file = new File("d:\\cxy\\1.txt");
+        //变为gbk
+       convertFile(file,CharsetUtil.CHARSET_GBK);
+//�是无法识别的字符
+//       String s = "11涓\uE15F枃\n" +
+//               "钀ㄥ崥鐨勬拻濞囦拱涓嶅埌鎾掑▏鍟婄湅灏辨槸鎵撳紑浜�";
+//        ByteBuffer byteBuffer = Charset.forName("GBK").encode(s);
+//
+//        System.out.println(Charset.forName("utf-8").decode(byteBuffer).toString());
+    }
 
 
 
