@@ -31,6 +31,10 @@ public class CharsetUtil {
     public static final Charset CHARSET_ISO_8859_1 = StandardCharsets.ISO_8859_1;
     /** UTF-8 */
     public static final Charset CHARSET_UTF_8 = StandardCharsets.UTF_8;
+
+    /** UTF-8 */
+    public static final Charset CHARSET_ASCII = StandardCharsets.US_ASCII;
+
     /** GBK */
     public static final Charset CHARSET_GBK = Charset.forName(GBK);
 
@@ -138,8 +142,8 @@ public class CharsetUtil {
 
 
     public static void main(String args[]){
-       // CharsetUtil.getAllSupportedCharsets().forEach(System.out::println);
-        System.out.println(convert("涓\uE15E浗",CHARSET_GBK, CHARSET_UTF_8));
+        //%E4%B8%AD%E6%96%87
+        System.out.println(Arrays.toString(HexUtil.encodeHex(StrUtil.bytes("中文",CHARSET_UTF_8),false)));
     }
 
 }
