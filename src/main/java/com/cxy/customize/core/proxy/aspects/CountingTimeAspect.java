@@ -2,7 +2,7 @@ package com.cxy.customize.core.proxy.aspects;
 
 
 import cn.hutool.core.date.TimeInterval;
-import com.cxy.customize.core.util.StrUtil;
+import cn.hutool.core.util.StrUtil;
 import java.lang.reflect.Method;
 
 /**

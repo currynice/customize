@@ -1,8 +1,8 @@
 package com.cxy.customize.core.text;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.cxy.customize.core.util.ArrayUtil;
-import com.cxy.customize.core.util.StrUtil;
 
 /**
  * 字符串格式化工具

@@ -1,6 +1,6 @@
 package com.cxy.customize.core.lang;
 
-import com.cxy.customize.core.util.StrUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 自定义断言<br>

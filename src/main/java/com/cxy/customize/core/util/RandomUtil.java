@@ -223,6 +223,23 @@ public class RandomUtil {
 
 
 
+    /**
+     * 该 randomLevel 方法会随机生成 1~MAX_LEVEL 之间的数，总体而言 ：
+     * 50%的概率返回 1
+     * 25%的概率返回 2
+     * 12.5%的概率返回 3 ...
+     * @param MAX_LEVEL
+     * @return
+     */
+    private static int randomLevel(int MAX_LEVEL) {
+
+        int level = 1;
+
+        while (Math.random() < 0.5f && level < MAX_LEVEL)
+            level += 1;
+        return level;
+    }
+
 
 
 

@@ -1,6 +1,5 @@
 package com.cxy.customize.core.util;
 
-
 import com.cxy.customize.core.text.StrFormatter;
 
 import java.io.UnsupportedEncodingException;
@@ -70,7 +69,7 @@ public class StrUtil {
      *  空的定义:
      *  null  ""   "   "如空格
      * @param str  String ,StringBuffer,StringBuilder等等
-      * @return
+     * @return
      */
     public static boolean isBlank(CharSequence str){
         int length;
@@ -79,9 +78,9 @@ public class StrUtil {
         }
         for(int i=0;i<length;i++){
             // 只要有一个非空字符即为非空字符串
-           if(!CharUtil.isBlankChar(str.charAt(i))){
+            if(!CharUtil.isBlankChar(str.charAt(i))){
                 return false;
-           }
+            }
         }
         return true;
     }
@@ -107,7 +106,7 @@ public class StrUtil {
         }
         for(CharSequence str:strs){
             if(isBlank(str)){
-              return true;
+                return true;
             }
         }
         return false;
@@ -308,7 +307,7 @@ public class StrUtil {
      * @return
      */
     public static boolean startWithIgnoreCase(CharSequence str, CharSequence prefix) {
-       return startWith(str,prefix,false);
+        return startWith(str,prefix,false);
     }
 
     /**
@@ -415,7 +414,7 @@ public class StrUtil {
      */
     public static boolean isSurround(CharSequence str,CharSequence start,CharSequence end){
         if(isBlank(str)){
-           return  false;
+            return  false;
         }
         //给定的长度小于前缀后缀之和
         if(str.length()<(start.length()+end.length())){
@@ -459,7 +458,7 @@ public class StrUtil {
                 return Character.toUpperCase(firstChar)+subSuf(str, 1);
             }
         }
-            return str.toString();
+        return str.toString();
     }
 
 
@@ -535,13 +534,13 @@ public class StrUtil {
      * @return
      */
     public static String removePrefix(CharSequence str,CharSequence prefix){
-            if(isEmpty(str)||isEmpty(prefix)){
-                return str(str);
-            }
-            if(startWith(str,prefix)){
-                return subSuf(str, prefix.length());// 截取后半段
-            }
+        if(isEmpty(str)||isEmpty(prefix)){
             return str(str);
+        }
+        if(startWith(str,prefix)){
+            return subSuf(str, prefix.length());// 截取后半段
+        }
+        return str(str);
     }
 
 
@@ -582,26 +581,26 @@ public class StrUtil {
      * @return
      */
     public static String sub(CharSequence str, int fromIndex, int toIndex){
-            if(isEmpty(str)){
-                return str(str);
-            }
-            int len = str.length();
+        if(isEmpty(str)){
+            return str(str);
+        }
+        int len = str.length();
 
-            // 修正开始，如果from 为负数
+        // 修正开始，如果from 为负数
+        if(fromIndex<0){
+            //按照length从后向前数位置
+            fromIndex+=len;
+            //绝对值小于字符串长度
             if(fromIndex<0){
-                //按照length从后向前数位置
-                fromIndex+=len;
-                //绝对值小于字符串长度
-                if(fromIndex<0){
-                    //from变成0
-                    fromIndex = 0;
-                }
-            }//开始位置就大于字符串长度
-            else if (fromIndex > len) {
-                fromIndex =len;
+                //from变成0
+                fromIndex = 0;
             }
+        }//开始位置就大于字符串长度
+        else if (fromIndex > len) {
+            fromIndex =len;
+        }
 
-            //to 为负数
+        //to 为负数
         if(toIndex<0){
             //按照length从后向前数位置
             toIndex+=len;
@@ -673,7 +672,7 @@ public class StrUtil {
 
     //byte()方法:原生的String.getByte()方法
     public static void main(String[] args)throws UnsupportedEncodingException {
-            String chs = "中";
+        String chs = "中";
 //        byte[] b_default = chs.getBytes();//文件编码方式
 //        byte[] b_gbk = chs.getBytes("gbk");
 //        byte[] b_utf8 = chs.getBytes("utf-8");
@@ -807,7 +806,7 @@ public class StrUtil {
             return Arrays.toString((Object[])obj);
         }
         return obj.toString();
-}
+    }
 
     /**
      * 解码字节码
@@ -1028,7 +1027,7 @@ public class StrUtil {
      * @return 如果两个字符串相同，或者都是<code>null</code>，则返回<code>true</code>
      */
     public static boolean equalsIgnoreCase(CharSequence str1, CharSequence str2) {
-      return equals(str1,str2,true);
+        return equals(str1,str2,true);
     }
 
 
@@ -1069,15 +1068,16 @@ public class StrUtil {
      * @return
      */
     public static String contactIfNotEndWithSuffix(CharSequence str, String suffix,boolean ignoreCase){
-            if(isEmpty(str)||isEmpty(suffix)){
-                return str(str);
-            }
-            final String targetStr = str.toString();
-            final String suffixStr = suffix.toString();
-            if (ignoreCase){
-               return targetStr.toLowerCase().endsWith(suffix.toLowerCase())?targetStr:targetStr.concat(suffixStr);
-            }else {
-                return targetStr.endsWith(suffix)?targetStr:targetStr.concat(suffixStr);
-            }
+        if(isEmpty(str)||isEmpty(suffix)){
+            return str(str);
+        }
+        final String targetStr = str.toString();
+        final String suffixStr = suffix.toString();
+        if (ignoreCase){
+            return targetStr.toLowerCase().endsWith(suffix.toLowerCase())?targetStr:targetStr.concat(suffixStr);
+        }else {
+            return targetStr.endsWith(suffix)?targetStr:targetStr.concat(suffixStr);
+        }
     }
 }
+
