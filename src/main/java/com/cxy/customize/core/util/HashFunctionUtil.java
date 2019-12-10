@@ -1,6 +1,8 @@
 package com.cxy.customize.core.util;
 
 import cn.hutool.core.lang.MurmurHash;
+import com.cxy.customize.core.exceptions.UtilException;
+import java.security.MessageDigest;
 
 /**
  * Hash算法大全
@@ -471,4 +473,27 @@ public class HashFunctionUtil {
 	public static long[] murmur128(byte[] data) {
 		return MurmurHash.hash128(data);
 	}
+
+
+	//sha256
+       /**
+     * 利用java原生的类实现SHA256加密
+     * @param str 加密后的报文
+     * @return
+     */
+	   public static String getSHA256(String str) {
+		   MessageDigest messageDigest;
+		   String encodestr = "";
+		   try {
+			   messageDigest = MessageDigest.getInstance("SHA-256");
+			   messageDigest.update(str.getBytes("UTF-8"));
+			   encodestr = HexUtil.encodeHexStr(messageDigest.digest());
+		} catch (Exception e) {
+			throw new UtilException(e,"加密失败");
+		}
+			return encodestr;
+	   }
+
+
+
 }
