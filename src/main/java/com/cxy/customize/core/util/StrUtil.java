@@ -1079,5 +1079,26 @@ public class StrUtil {
             return targetStr.endsWith(suffix)?targetStr:targetStr.concat(suffixStr);
         }
     }
+
+
+    //contains
+    /**
+     * 查找指定字符串是否包含指定字符数组中的任意一个字符
+     *
+     * @param str 指定字符串
+     * @param testChars 需要检查的字符数组
+     * @return 是否包含任意一个字符
+     */
+    public static boolean containsAny(CharSequence str, char... testChars) {
+        if (!isEmpty(str)) {
+            int len = str.length();
+            for (int i = 0; i < len; i++) {
+                if (ArrayUtil.contains(testChars, str.charAt(i))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
 

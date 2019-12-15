@@ -1,13 +1,12 @@
 package com.cxy.customize.core.io;
 
 
-import cn.hutool.core.util.StrUtil;
-import com.cxy.customize.core.io.file.FileCopier;
+
 import com.cxy.customize.core.io.file.FileModeEnum;
 import com.cxy.customize.core.lang.Assert;
 import com.cxy.customize.core.util.ArrayUtil;
 import com.cxy.customize.core.util.CharUtil;
-import com.cxy.customize.core.util.CharsetUtil;
+import com.cxy.customize.core.util.StrUtil;
 
 import java.io.*;
 import java.nio.CharBuffer;
@@ -32,11 +31,14 @@ public class FileUtil {
 
     private FileUtil() {
     }
+
+
+
     // 类似Unix 的分隔符'/';
-    private static final char UNIX_SPERATOR = CharUtil.SLASH;
+    private static final char UNIX_SEPARATOR = CharUtil.SLASH;
 
     // window 的分隔符'\\';
-    private static final char WINDOWS_SPERATOR = CharUtil.BACKSLASH;
+    private static final char WINDOWS_SEPARATOR = CharUtil.BACKSLASH;
 
     //windows文件名的无效字符9个  \ / : * ? " < > |
     private static Pattern INVALID_CHARACTER_WIN = Pattern.compile("[\\\\/:*?\"<>|]");
@@ -50,12 +52,12 @@ public class FileUtil {
      * @return
      */
     public static boolean isWindows(){
-        return WINDOWS_SPERATOR== File.separatorChar;
+        return WINDOWS_SEPARATOR== File.separatorChar;
     }
 
 
     public static boolean isUnix(){
-        return UNIX_SPERATOR == File.separatorChar;
+        return UNIX_SEPARATOR == File.separatorChar;
     }
 
     /**
@@ -350,10 +352,10 @@ public class FileUtil {
 
     //————————copy——————
     /**
-     * 通过JDK7+的 {@link Files#copy(Path, Path, CopyOption...)} 方法拷贝文件
+     * 通过JDK7+的 {@link Files#copy(Path, Path, CopyOption...)} 方法拷贝文件,原理: 操作用户态空间进制
      *
-     * @param src 源文件路径
-     * @param dest 目标文件或目录
+     * @param src 源目录或者文件路径
+     * @param dest 目标文件或目录都行，如果为目录使用与源文件相同的文件名
      * @param options {@link StandardCopyOption}
      * @return Path
      * @throws IOCustomException IO异常
@@ -362,8 +364,8 @@ public class FileUtil {
 
         Assert.notNull(src,"源目录或文件为空");
         Assert.notNull(dest,"目标目录或文件为空");
-        //foo/bar ”，则使用路径字符串“ gus ”调用此方法将导致Path “ foo/bar/gus
-        Path realDestPath = src.toFile().isDirectory()? dest.resolve(src.getFileName()):dest;
+        // 如果为目录使用与源文件相同的文件名
+        Path realDestPath = dest.toFile().isDirectory()? dest.resolve(src.getFileName()):dest;
         try {
           return   Files.copy(src,realDestPath,options);
         } catch (IOException e) {
@@ -390,6 +392,51 @@ public class FileUtil {
         Assert.notBlank(src, "Source File is null !");
         Assert.notBlank(dest, "Destination File or directiory is null !");
         return copyFile(Paths.get(src),Paths.get(dest),options).toFile();
+    }
+
+    //copyFile end
+
+    //move start todo
+
+    //move end
+
+
+    /**
+     * 修改文件或目录的文件名，不涉及路径，只是简单修改文件名<br>
+     * 重命名模式isRetainExt有两种：<br>
+     * 1、true，保留原扩展名：
+     *
+     * <pre>
+     * FileUtil.rename(file, "aaa", true) xx/xx.png =》xx/aaa.png
+     * </pre>
+     *
+     * 2、false，不保留原扩展名，需要在newName中
+     *
+     * <pre>
+     * FileUtil.rename(file, "aaa.jpg", false) xx/xx.png =》xx/aaa.jpg
+     * </pre>
+     *
+     * @param file 被修改的文件
+     * @param newName 新的文件名，包括扩展名
+     * @param isRetainExt 是否保留原文件的扩展名，如果保留，则newName不需要加扩展名
+     * @return 目标文件
+     */
+    public static File rename(File file, String newName, boolean isRetainExt) {
+        if (isRetainExt) {
+            //加上保留原来的后缀名
+            newName = newName.concat(".").concat(FileUtil.extName(file));
+        }
+        final Path path = file.toPath();
+        try {
+            return Files.move(path, path.resolveSibling(newName)).toFile();
+        } catch (IOException e) {
+            throw new IOCustomException(e);
+        }
+    }
+
+
+    public static void main(String args[]){
+
     }
 
     /**
@@ -445,66 +492,6 @@ public class FileUtil {
             }
         }
         return result;
-    }
-
-    /**
-     * 复制文件或目录<br>
-     * 情况如下：
-     *
-     * <pre>
-     * 1、src和dest都为目录，则将src目录及其目录下所有文件目录拷贝到dest下
-     * 2、src和dest都为文件，直接复制，名字为dest
-     * 3、src为文件，dest为目录，将src拷贝到dest目录下
-     * </pre>
-     *
-     * @param src 源文件
-     * @param dest 目标文件或目录，目标不存在会自动创建（目录、文件都创建）
-     * @param isOverride 是否覆盖目标文件
-     * @return 目标目录或文件
-     * @throws IOCustomException IO异常
-     */
-    public static File copy(File src, File dest, boolean isOverride) throws IOCustomException {
-        return FileCopier.create(src, dest).setOverride(isOverride).copy();
-    }
-
-    /**
-     * 复制文件或目录<br>
-     * 情况如下：
-     *
-     * <pre>
-     * 1、src和dest都为目录，则讲src下所有文件目录拷贝到dest下
-     * 2、src和dest都为文件，直接复制，名字为dest
-     * 3、src为文件，dest为目录，将src拷贝到dest目录下
-     * </pre>
-     *
-     * @param src 源文件
-     * @param dest 目标文件或目录，目标不存在会自动创建（目录、文件都创建）
-     * @param isOverride 是否覆盖目标文件
-     * @return 目标目录或文件
-     * @throws IOCustomException IO异常
-     */
-    public static File copyContent(File src, File dest, boolean isOverride) throws IOCustomException {
-        return FileCopier.create(src, dest).setCopyContentIfDir(true).setOverride(isOverride).copy();
-    }
-
-    /**
-     * 复制文件或目录<br>
-     * 情况如下：
-     *
-     * <pre>
-     * 1、src和dest都为目录，则讲src下所有文件（包括子目录）拷贝到dest下
-     * 2、src和dest都为文件，直接复制，名字为dest
-     * 3、src为文件，dest为目录，将src拷贝到dest目录下
-     * </pre>
-     *
-     * @param src 源文件
-     * @param dest 目标文件或目录，目标不存在会自动创建（目录、文件都创建）
-     * @param isOverride 是否覆盖目标文件
-     * @return 目标目录或文件
-     * @throws IOCustomException IO异常
-     */
-    public static File copyFilesFromDir(File src, File dest, boolean isOverride) throws IOCustomException {
-        return FileCopier.create(src, dest).setCopyContentIfDir(true).setOnlyCopyFile(true).setOverride(isOverride).copy();
     }
 
 
@@ -596,17 +583,90 @@ public class FileUtil {
          }
      }
 
-    public static void main(String [] args) throws IOException {
-        File file = new File("d:\\cxy\\1.txt");
-        //变为gbk
-       convertFile(file,CharsetUtil.CHARSET_GBK);
-//�是无法识别的字符
-//       String s = "11涓\uE15F枃\n" +
-//               "钀ㄥ崥鐨勬拻濞囦拱涓嶅埌鎾掑▏鍟婄湅灏辨槸鎵撳紑浜�";
-//        ByteBuffer byteBuffer = Charset.forName("GBK").encode(s);
-//
-//        System.out.println(Charset.forName("utf-8").decode(byteBuffer).toString());
+
+    // ---------------名字相关--------------------------------------- name start
+    /**
+     * 返回文件名    d:/cxy/1.txt  ->  1.txt
+     *
+     * @param file 文件
+     * @return 文件名 |  null
+     */
+    public static String getName(File file) {
+        return (null != file) ? file.getName() : null;
     }
+
+
+    /**
+     * 针对全路径,返回文件名
+     *
+     * @param filePath 文件
+     * @return 文件名  | null
+     */
+    public static String getName(String filePath) {
+
+        if (StrUtil.isBlank(filePath)) {
+            return null;
+        }
+        int len = filePath.length();
+
+
+        if (CharUtil.isFileSeparator(filePath.charAt(len - 1))) {
+            // 以分隔符结尾的去掉结尾分隔符
+            len--;
+        }
+
+        int begin = 0;
+        char c;
+        for (int i = len - 1; i > -1; i--) {
+            c = filePath.charAt(i);
+            if (CharUtil.isFileSeparator(c)) {
+                // 从后往前,查找最后一个路径分隔符（/或者\）
+                begin = i + 1;
+                break;
+            }
+        }
+
+        return filePath.substring(begin, len);
+    }
+
+
+
+    /**
+     * 获取文件扩展名，扩展名不带“.”
+     *
+     * @param file 文件
+     * @return 扩展名
+     */
+    public static String extName(File file) {
+        if (null == file || file.isDirectory()) {
+            return null;
+        }
+
+        return extName(file.getName());
+    }
+
+    /**
+     * 获得文件的扩展名，不带“.”
+     *
+     * @param fileName 文件名
+     * @return 扩展名
+     */
+    public static String extName(String fileName) {
+        if (fileName == null) {
+            return null;
+        }
+        int index = fileName.lastIndexOf(StrUtil.DOT);
+        if (index == -1) {
+            return StrUtil.EMPTY;
+        } else {
+            String ext = fileName.substring(index + 1);
+            // 扩展名中不能包含路径相关的符号
+            return StrUtil.containsAny(ext, UNIX_SEPARATOR, WINDOWS_SEPARATOR) ? StrUtil.EMPTY : ext;
+        }
+    }
+    // -------------------------------------------------------------------------------------------- name end
+
+
 
 
 
