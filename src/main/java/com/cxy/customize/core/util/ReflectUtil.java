@@ -4,7 +4,6 @@ import cn.hutool.core.lang.SimpleCache;
 import com.cxy.customize.A;
 import com.cxy.customize.core.exceptions.UtilException;
 import com.cxy.customize.core.lang.Assert;
-import com.sun.org.apache.bcel.internal.classfile.InnerClass;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -104,10 +103,43 @@ public class ReflectUtil {
         }
     }
 
-//todo
-    public static Field[]  getAllField(Class typeClass){
-return null;
+    //获得typeClass的所有Field
+    public static Field[]  getAllField(Class typeClass)throws SecurityException {
+        Field[] allFields = FIELDS_CACHE.get(typeClass);
+        if (null != allFields) {
+            return allFields;
+        }
+        allFields = getFieldsDirectly(typeClass, true);
+        return FIELDS_CACHE.put(typeClass, allFields);
     }
+
+    /**
+     * 获得一个type 中所有fields 反射获取，不存入FIELDS_CACHE缓存
+     *
+     * @param typeClass 类
+     * @param withSuperClassFieds 是否继续取父类的字段列表
+     * @return Field[]
+     * @throws SecurityException 安全检查异常
+     */
+    public static Field[] getFieldsDirectly(Class<?> typeClass, boolean withSuperClassFieds) throws SecurityException {
+        Assert.notNull(typeClass);
+
+        Field[] allFields = null;
+        Class<?> searchType = typeClass;
+        Field[] declaredFields;
+        while (searchType != null) {
+            declaredFields = searchType.getDeclaredFields();
+            if (null == allFields) {
+                allFields = declaredFields;
+            } else {
+                allFields = ArrayUtil.append(allFields, declaredFields);
+            }
+            searchType = withSuperClassFieds ? searchType.getSuperclass() : null;
+        }
+
+        return allFields;
+    }
+
 
 
     enum E{
@@ -123,7 +155,6 @@ return null;
 //        testgetClasses();
 //        System.out.println("-------");
 //        testgetDeclaredClasses();
-        testgetDeclaringClasses();
     }
 
     private static void testGetClass(){

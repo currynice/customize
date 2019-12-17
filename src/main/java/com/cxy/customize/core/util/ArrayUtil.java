@@ -388,4 +388,94 @@ public class ArrayUtil {
         return INDEX_NOT_FOUND;
     }
 
+    //insert
+
+
+    //append
+
+    /**
+     * 将新元素添加到已有数组中<br>
+     * 添加新元素会生成一个新的数组，不影响原数组
+     * @param <T> 数组元素类型
+     * @param buffer 已有数组
+     * @param newElements 新元素
+     * @return 新数组
+     */
+    @SafeVarargs
+    public static <T> T[] append(T[] buffer, T... newElements) {
+        if(isEmpty(buffer)) {
+            return newElements;
+        }
+        return insert(buffer, buffer.length, newElements);
+    }
+
+
+    /**
+     * 将新元素插入到到已有数组中的某个位置<br>
+     * 添加新元素会生成一个新的数组，不影响原数组<br>
+     * 如果插入位置为为负数，从原数组从后向前计数，若大于原数组长度，则空白处用null填充
+     *
+     * @param <T> 数组元素类型
+     * @param buffer 已有数组
+     * @param index 插入位置，此位置为对应此位置元素之前的空档
+     * @param newElements 新元素
+     * @return 新数组
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T[] insert(T[] buffer, int index, T... newElements) {
+        return (T[]) insert((Object)buffer, index, newElements);
+    }
+
+
+    /**
+     * 将新元素插入到到已有数组中的某个位置<br>
+     * 添加新元素会生成一个新的数组，不影响原数组<br>
+     * 如果插入位置为为负数，从原数组从后向前计数，若大于原数组长度，则空白处用null填充
+     *
+     * @param <T> 数组元素类型
+     * @param array 已有数组
+     * @param index 插入位置，此位置为对应此位置元素之前的空档
+     * @param newElements 新元素
+     * @return 新数组
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Object insert(Object array, int index, T... newElements) {
+        if (isEmpty(newElements)) {
+            return array;
+        }
+        if(isEmpty(array)) {
+            return newElements;
+        }
+
+        final int len = length(array);
+        if (index < 0) {
+            index = (index % len) + len;
+        }
+
+        final T[] result = newArray(array.getClass().getComponentType(), Math.max(len, index) + newElements.length);
+        System.arraycopy(array, 0, result, 0, Math.min(len, index));
+        System.arraycopy(newElements, 0, result, index, newElements.length);
+        if (index < len) {
+            System.arraycopy(array, index, result, index + newElements.length, len - index);
+        }
+        return result;
+    }
+
+
+    /**
+     * 获取数组长度<br>
+     * array为{@code null}，返回0
+     *
+     * @param array 对象,不是数组对象会抛异常
+     * @return 数组长度
+     * @throws IllegalArgumentException 如果参数不为数组，抛出此异常
+     * @see  Array#getLength(Object)
+     */
+    public static int length(Object array) throws IllegalArgumentException {
+        if (null == array) {
+            return 0;
+        }
+        return Array.getLength(array);
+    }
+
 }
