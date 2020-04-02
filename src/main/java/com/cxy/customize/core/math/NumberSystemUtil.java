@@ -39,13 +39,16 @@ public class NumberSystemUtil {
      */
     public static int binary2Decimal(String binargSource){
         BigInteger bigInteger = new BigInteger(binargSource,2);
-        return Integer.valueOf(bigInteger.toString());
+        return Integer.valueOf(bigInteger.toString());//默认转换成十进制
     }
 
 
     /**
-     * 相当于乘2
+     * 逻辑左移 相当于乘(2^m)
      * @Description: 向左移位
+     *
+     *  110101  左移1位时  当数字不溢出的情况下， 末尾加1位0  1101010
+     *              当二进制位数超过系统指定的位数时，需要将溢出的高位去除
      * @param num- 等待移位的十进制数, m- 向左移的位数
      * @return int- 移位后的十进制数
      */
@@ -55,8 +58,20 @@ public class NumberSystemUtil {
 
 
     /**
-     * 逻辑右移动相当于除2
+     * 算数右移(负数除法使用)
+     */
+    public static int rightShift2(int num, int m) {
+        return num >> m;
+    }
+
+
+
+    /**
+     * 逻辑右移 相当于除以(2^m)的整数商
      * @Description: 向右移位
+     *
+     * 110101  右移1位    去除未尾1位  11010
+     *
      * @param num- 等待移位的十进制数, m- 向右移的位数
      * @return int- 移位后的十进制数
      */
@@ -65,6 +80,11 @@ public class NumberSystemUtil {
     }
 
 
+
+    public static void main(String args[]){
+
+        System.out.println(rightShift2(-53,1));
+    }
     //bit operation 位操作
     /**
      * 或
@@ -200,25 +220,6 @@ public class NumberSystemUtil {
     }
 
 
-    public static void main(String args[]){
-
-
-        System.out.println((charToAsciiValue('h')));
-        System.out.println((charToAsciiValue('e')));
-        System.out.println((charToAsciiValue('l')));
-        System.out.println((charToAsciiValue('l')));
-        System.out.println((charToAsciiValue('o')));
-
-        System.out.println(decimal2Binary(charToAsciiValue('h')));
-        System.out.println(decimal2Binary(charToAsciiValue('e')));
-        System.out.println(decimal2Binary(charToAsciiValue('l')));
-        System.out.println(decimal2Binary(charToAsciiValue('l')));
-        System.out.println(decimal2Binary(charToAsciiValue('o')));
-        System.out.println(leftShift(2,13));
-        System.out.println(0xffffffffffffffffL);
-        System.out.println(middle(2,10));
-        System.out.println(middle(1,10));
-    }
 
 
 }
