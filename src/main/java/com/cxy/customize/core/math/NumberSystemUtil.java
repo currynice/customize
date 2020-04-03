@@ -7,6 +7,7 @@ import com.cxy.customize.core.lang.Assert;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.Arrays;
 
 /**
  * 进制转换
@@ -80,15 +81,10 @@ public class NumberSystemUtil {
     }
 
 
-
-    public static void main(String args[]){
-
-        System.out.println(rightShift2(-53,1));
-    }
-    //bit operation 位操作
+    //bit operation 位操作（0假1真）
     /**
      * 或
-     * 有1真为真1
+     * 有1为1 (真)
      * @param num1
      * @param num2
      * @return
@@ -101,8 +97,8 @@ public class NumberSystemUtil {
 
     /**
      * 与
-     * 有0假为假0
-     * 将数字和1进行与运算，得到数字的最后一位，最后一位为0是偶数，1是奇数，比对2取模快点
+     * 全1为1(真)，有0为0（假）
+     * 应用: 将数字和1进行与运算，结果的最后一位为0，数字是偶数，1是奇数，比对2取模快点
      * @param num1
      * @param num2
      * @return
@@ -139,6 +135,84 @@ public class NumberSystemUtil {
     }
 
     /**
+     * 二分迭代法计算 算数平方根
+     * 10 的平方根。
+     * 1） 找到1 到 10 的中间数值，11/2=5.5。5.5 的平方大于 10 ，结果一定比5.5更小，即在5.5 和 1 之间
+     * 2）1和5.5之间的中间数值是 3.25。 3.25 的平方大于 10 ，
+     * 3) 1和3.25的中间数值是2.125。2.125 的平方小于 10 ，结果在2.125 和 3.25 之间的值.....
+     *  @param  n 大于1的正整数，不符合将返回 -1.0
+     * @param  deltaThreshold  误差的阈值
+     * @param  maxTry   二分查找的最大次数，防止无限循环
+     * @return
+     */
+    public static double arithSqureSort(int n,double deltaThreshold,int maxTry) {
+        if (n <= 1) {
+            return -1.0;
+        }
+
+        double min = 1.0, max = (double) n;
+        for (int i = 0; i < maxTry; i++) {
+            double middleValue = middle(min, max);//找到中间数
+            double square = middleValue * middleValue;
+            double delta = Math.abs((square / n) - 1);//误差
+            if (delta <= deltaThreshold) {
+                return middleValue;
+            } else {
+                if (square > n) {
+                    max = middleValue;
+                } else {
+                    min = middleValue;
+                }
+            }
+            }
+            return -2.0;
+        }
+
+
+
+    /**
+     * @Description: 查找某个单词是否在字典里出现
+     * @param dictionary- 排序后的字典(需要确保是有序的), wordToFind- 待查的单词
+     * @return boolean- 是否发现待查的单词
+     */
+    public static boolean search(String[] dictionary, String wordToFind) {
+        if (dictionary == null || dictionary.length == 0) {
+            return false;
+        }
+
+
+        int left = 0, right = dictionary.length - 1;
+        while (left <= right) {
+            int middle = middle(left,right);
+            if (dictionary[middle].equals(wordToFind)) {
+                return true;
+            } else {
+                if (dictionary[middle].compareTo(wordToFind) > 0) {
+                    right = middle - 1;
+                } else {
+                    left = middle + 1;
+                }
+            }
+        }
+
+        return false;
+
+        }
+
+
+            public static void main(String args[]){
+
+                String[] dictionary = {"i", "am", "a",  "happy", "snowman","in","summer"};
+
+                Arrays.sort(dictionary);
+                String wordToFind = "happy";
+                System.out.println(search(dictionary,wordToFind));
+
+//        System.out.println(arithSqureSort(10,0.5,10));
+    }
+
+
+    /**
      * 找到中间数
      * 避免(min+max)/2  出现溢出
      * @param min
@@ -146,6 +220,11 @@ public class NumberSystemUtil {
      * @return
      */
     public static int middle(int min,int max) {
+        Assert.isTrue(min<=max,"min  is forced to be less than max ");
+        return min+(max-min)/2;
+    }
+
+    public static double middle(double min,double max) {
         Assert.isTrue(min<=max,"min  is forced to be less than max ");
         return min+(max-min)/2;
     }

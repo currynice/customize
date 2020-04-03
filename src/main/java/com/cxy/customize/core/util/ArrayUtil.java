@@ -377,6 +377,75 @@ public class ArrayUtil {
         }
         return result;
     }
+    //mergerSort
+    /**
+     * 归并排序（从小到大）
+     * @param  toSort 等待排序的数组(可能是乱序的)
+     * @return  排好序的数组
+     */
+    public static int[] mergeSort(int[] toSort){
+        if(toSort==null){
+            return new int[0];
+        }
+        if(toSort.length==1){
+            return toSort;
+        }
+        int middle = toSort.length/2;//计算中间数
+        // Arrays.copyOfRange(toSort,0,2)  只有 toSort[0],toSort[1]两个元素
+        int[] left = Arrays.copyOfRange(toSort,0,middle);
+        int[] right = Arrays.copyOfRange(toSort,middle,toSort.length);
+        left = mergeSort(left);//都是排好序的数组或单个元素数组
+        right = mergeSort(right);//都是排好序的数组或单个元素数组
+        return mergerIntArray(left,right);
+    }
+
+
+
+    //-----------merge----------合并-------------------
+
+    /**
+     * 合并两个经过排序的数组
+     * @param a  一个经过排序的数组
+     * @param b   另一个排序过的数组
+     * @return
+     */
+    public static  int[] mergerIntArray(int[] a,int b[]){
+        if (a == null) a = new int[0];
+        if (b == null) b = new int[0];
+
+        int[] merged1 = new int[a.length + b.length];
+
+        int mi = 0, ai = 0, bi = 0;
+
+        // 轮流从两个数组中取出较小的值，放入合并后的数组中
+        while (ai < a.length && bi < b.length) {
+
+            if (a[ai] <= b[bi]) {
+                merged1[mi] = a[ai];
+                ai ++;
+            } else {
+                merged1[mi] = b[bi];
+                bi ++;
+            }
+            mi ++;
+        }
+// 将某个数组内剩余的数字放入合并后的数组中
+        //a数组还有剩余元素
+        if (ai < a.length) {
+            for (int i = ai; i < a.length; i++) {
+                merged1[mi] = a[i];
+                mi ++;
+            }
+        } else {
+            // b数组还有剩余元素
+            for (int i = bi; i < b.length; i++) {
+                merged1[mi] = b[i];
+                mi ++;
+            }
+        }
+        return merged1;
+    }
+
 
     //-----------clone----------克隆--------Equals相同-----------
 
@@ -661,12 +730,12 @@ public class ArrayUtil {
 
 
     public static void main(String args[]){
-        Integer[] arr = new Integer[]{1,2};
-
-        int[] arr2 = new int[]{1,2};
-
-        System.out.println(clone(arr).equals(arr));
-        System.out.println(clone(arr2).equals(arr2));
+        int[] to_sort = {3434, 3356, 67, 12334, 878667, 387};
+//        int[] sorted = Lesson6_1.merge_sort(to_sort);
+        int[] arr1 = { 387, 3356, 878667};
+        int[] arr2 = { 67,3434,12334};
+        System.out.println(Arrays.toString(mergerIntArray(arr1,arr2)));
+        System.out.println(Arrays.toString(mergeSort(to_sort)));
     }
 
 
