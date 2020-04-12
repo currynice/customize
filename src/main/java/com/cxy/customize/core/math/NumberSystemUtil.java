@@ -18,6 +18,26 @@ import java.util.Arrays;
  */
 public class NumberSystemUtil {
 
+    /**
+     * 假设val是客户端BigIntegr的不可变子类
+     * @param val
+     * @return
+     */
+    public static BigInteger selfInstance(BigInteger val){
+        return val.getClass()==BigInteger.class?val:new BigInteger(val.toByteArray());
+    }
+
+
+    /**
+     * 假设val是客户端BigDecimal的不可变子类
+     * @param val
+     * @return
+     */
+    public static BigDecimal selfInstance(BigDecimal val){
+        return val.getClass()==BigDecimal.class?val:new BigDecimal(val.toString());
+    }
+
+
     /** 默认除法运算精度 */
     private static final int DEFAUT_DIV_SCALE = 10;
 
