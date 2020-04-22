@@ -218,7 +218,7 @@ public class StrUtil {
         return trim(str, 0);
     }
     /**
-     * 除去字符串头尾部的空白符，如果字符串是 null，或结果为"",则返回null。
+     *  除去字符串头尾部的空白符，如果字符串是 null,则返回null。
      *
      * @param str 要处理的字符串
      * @param mode trim模式: -1:表示trimStart，0:表示trim全部，1:表示trimEnd
