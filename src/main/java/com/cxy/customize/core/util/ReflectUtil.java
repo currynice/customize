@@ -1,7 +1,7 @@
 package com.cxy.customize.core.util;
 
 import cn.hutool.core.lang.SimpleCache;
-import com.cxy.customize.A;
+import com.cxy.customize.test.A;
 import com.cxy.customize.core.exceptions.UtilException;
 import com.cxy.customize.core.lang.Assert;
 

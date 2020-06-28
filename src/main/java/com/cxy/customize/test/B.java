@@ -1,4 +1,4 @@
-package com.cxy.customize;
+package com.cxy.customize.test;
 
 public class B extends A {
    private  enum aEnum{
