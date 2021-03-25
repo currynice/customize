@@ -1,7 +1,7 @@
-package com.cxy.customize.principle.IOC;
+package com.cxy.soft_design.principle.IOC;
 
-import com.cxy.customize.principle.IOC.cases.TestCaseImple1;
-import com.cxy.customize.principle.IOC.cases.TestCaseImple2;
+import com.cxy.soft_design.principle.IOC.cases.TestCaseImple1;
+import com.cxy.soft_design.principle.IOC.cases.TestCaseImple2;
 
 import java.util.ArrayList;
 import java.util.List;

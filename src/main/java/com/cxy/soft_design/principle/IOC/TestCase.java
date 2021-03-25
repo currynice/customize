@@ -1,4 +1,4 @@
-package com.cxy.customize.principle.IOC;
+package com.cxy.soft_design.principle.IOC;
 
 public abstract class TestCase {
     public void run() {

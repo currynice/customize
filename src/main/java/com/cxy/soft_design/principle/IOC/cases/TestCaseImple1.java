@@ -1,6 +1,6 @@
-package com.cxy.customize.principle.IOC.cases;
+package com.cxy.soft_design.principle.IOC.cases;
 
-import com.cxy.customize.principle.IOC.TestCase;
+import com.cxy.soft_design.principle.IOC.TestCase;
 
 public class TestCaseImple1 extends TestCase {
         @Override

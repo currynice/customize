@@ -1,4 +1,4 @@
-package com.cxy.customize.principle.DI;
+package com.cxy.soft_design.principle.DI;
 
 
 //短信

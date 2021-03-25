@@ -1,4 +1,4 @@
-package com.cxy.design_pattern.strategy;
+package com.cxy.soft_design.design_pattern.strategy;
 
 /**
  * Description:  价格管理，主要完成计算向客户所报价格的功能  <br>

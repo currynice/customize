@@ -1,4 +1,4 @@
-package com.cxy.design_pattern.strategy;
+package com.cxy.soft_design.design_pattern.strategy;
 
 /**
  * Description:   <br>

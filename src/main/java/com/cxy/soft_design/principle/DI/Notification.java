@@ -1,8 +1,9 @@
-package com.cxy.customize.principle.DI;
+package com.cxy.soft_design.principle.DI;
 
 
-// 依赖注入的实现方式
+
 public class Notification {
+
     private MessageSender messageSender;
 
     // 通过构造函数将messageSender传递进来

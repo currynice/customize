@@ -1,4 +1,4 @@
-package com.cxy.design_pattern.strategy;
+package com.cxy.soft_design.design_pattern.strategy;
 
 /**
  * Description: 策略，定义计算报价的方法  <br>
