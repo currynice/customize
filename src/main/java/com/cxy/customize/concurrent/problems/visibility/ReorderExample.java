@@ -9,18 +9,20 @@ package com.cxy.customize.concurrent.problems.visibility;
  */
 public class ReorderExample {
     int x = 0;
-
-    boolean flag = false;
+    int y = 1;
+    volatile boolean flag = false;
 
     public void writer() {
         x = 42; //1
-        flag = true; //2
+        y = 50; //2
+        flag = true; //3
     }
 
 
     public void reader() {
-        if (flag) { //3
-            System.out.println(x); //4
+        if (flag) { //4
+            System.out.println("x:"+x); //5
+            System.out.println("y:"+y); //6
         }
     }
 }
