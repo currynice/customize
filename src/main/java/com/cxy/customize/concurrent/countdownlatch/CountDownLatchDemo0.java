@@ -24,7 +24,7 @@ public class CountDownLatchDemo0 {
 
         executorService.submit(() -> {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2*1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
@@ -36,7 +36,7 @@ public class CountDownLatchDemo0 {
 
         executorService.submit(() -> {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2*1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
@@ -48,7 +48,9 @@ public class CountDownLatchDemo0 {
 
         log.info("主线程等待⼦线程执⾏完毕");
         log.info("计数器值为：" + countDownLatch.getCount());
+//        countDownLatch.await(1000, TimeUnit.MILLISECONDS);
         countDownLatch.await();
+
         log.info("计数器值为：" + countDownLatch.getCount());
         log.info("主线程执⾏完毕");
         executorService.shutdown();
