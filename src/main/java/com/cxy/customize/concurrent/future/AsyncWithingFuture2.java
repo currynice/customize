@@ -32,6 +32,7 @@ public class AsyncWithingFuture2 {
         // 创建线程1的FutureTask
         FutureTask<String> ft1 = new FutureTask<>(new T1Task(ft2));
 
+
         executorService.submit(ft1);
         executorService.submit(ft2);
         log.info(ft1.get() + ft2.get());
@@ -41,7 +42,7 @@ public class AsyncWithingFuture2 {
     }
 
     /**
-     * 因任务1 执行时间更长，
+     * 因任务1 执行时间更长，优化了执行顺序，T1Task 通过构造函数依赖了 T2Task，先自己执行一部分，然后等待  T2Task的可用结果，最终完成自己的执行
      */
     static class T1Task implements Callable<String> {
 
